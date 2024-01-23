@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -39,20 +40,12 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    DriveTrain.backRightMotor.setInverted(true);
-    DriveTrain.frontRightMotor.setInverted(true);
-    DriveTrain.frontLeftMotor.setInverted(false);
-    DriveTrain.backLeftMotor.setInverted(false);
-    System.out.println("here!");
-    
+    DriveTrain.applyConfig();
+
     autoChoice.setDefaultOption("forwards", forwardAuto);
     autoChoice.addOption("backwards", backwardAuto);
     SmartDashboard.putData("Auto choices", autoChoice);
-    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
-    // autonomous chooser on the dashboard.
-    //m_robotContainer = new RobotContainer();
-    
-    
+
   }
 
   /**

@@ -10,33 +10,24 @@ import frc.robot.Constants;
 
 public class DriveTrain extends SubsystemBase{
     //OpenLoopRampsConfigs openLoopRampsConfigs = new OpenLoopRampsConfigs();
-    public DriveTrain() {
-      
-        //backLeftMotor.setInverted(true);
-        //frontLeftMotor.setInverted(true);
-        // backLeftMotor openLoopRampsConfigs
-        //backLeftMotor.configOpenloopRamp(0.1);
-        // backRightMotor.configOpenloopRamp(0.1);
-        // frontRightMotor.configOpenloopRamp(0.1);
-        // frontLeftMotor.configOpenloopRamp(0.1);
+    public static void applyConfig() {
+      frontLeftMotor.getConfigurator().apply(configSpeed);
+      frontRightMotor.getConfigurator().apply(configSpeed);
+      backLeftMotor.getConfigurator().apply(configSpeed);
+      backRightMotor.getConfigurator().apply(configSpeed);
     }
 
    // TalonFX motor = new TalonFX(0); // creates a new TalonFX with ID 0
 
-    public static final TalonFX frontLeftMotor = new TalonFX(Constants.ports.frontLeft);
-    public static final TalonFX frontRightMotor = new TalonFX(Constants.ports.frontRight);
-    public static final TalonFX backLeftMotor = new TalonFX(Constants.ports.backLeft);
-    public static final TalonFX backRightMotor = new TalonFX(Constants.ports.backRight);
+    public static final TalonFX frontLeftMotor = new TalonFX(Constants.FRONT_LEFT_ID);
+    public static final TalonFX frontRightMotor = new TalonFX(Constants.FRONT_RIGHT_ID);
+    public static final TalonFX backLeftMotor = new TalonFX(Constants.BACK_LEFT_ID);
+    public static final TalonFX backRightMotor = new TalonFX(Constants.BACK_RIGHT_ID);
+    
+
+    public static final OpenLoopRampsConfigs configSpeed = new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0.5);
 
     
-    //private final PWMMotorController left = new PWMMotorController()
-    //private final DifferentialDrive drive = new DifferentialDrive()
-
-    //private final MotorController leftSpeedGroup = new MotorController()
-
-    //private final MotorControllerGroup leftSpeedGroup = new MotorControllerGroup(frontLeftMotor, backLeftMotor);
-    //private final MotorControllerGroup rightSpeedGroup = new MotorControllerGroup(frontRightMotor, backRightMotor);
-
     private static final DifferentialDrive frontDrive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
     private static final DifferentialDrive backDrive = new DifferentialDrive(backLeftMotor, backRightMotor);
     
@@ -45,8 +36,8 @@ public class DriveTrain extends SubsystemBase{
 
   public static void driveBoth(double forwardPercent, double rotationPercent)
   {
-    frontDrive.arcadeDrive(forwardPercent, rotationPercent);
     backDrive.arcadeDrive(forwardPercent, rotationPercent);
+    frontDrive.arcadeDrive(forwardPercent, rotationPercent);
   }
 
   public static void turnDrive(double forwardPercent, double rotationPercent) {
@@ -62,7 +53,7 @@ public class DriveTrain extends SubsystemBase{
   //   driveBoth(leftPercent, leftPercent);.tankDrive(leftPercent, rightPercent);
   // }
   public double getVelocity(){
-    return 0;
+    return (frontLeftMotor.getVelocity().getValue()+frontRightMotor.getVelocity().getValue())/2;
     // return((frontLeftMotor.getVelocity()+frontRightMotor.getVelocity()+
     //         backLeftMotor.getVelocity()+backRightMotor.getVelocity())/4);
   }
