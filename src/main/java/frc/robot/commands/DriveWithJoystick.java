@@ -31,15 +31,13 @@ public class DriveWithJoystick extends Command{
     newSpeed =   -YJoystick;
     turnRate = XJoystick;
 
-      if(Math.abs(turnRate) < Constants.turnDeadBand) {
-        turnRate = 0;
-      } else if (turnRate > 0) {
+      if (turnRate > 0) {
         turnRate = (turnRate * turnRate) * (1-Constants.MIN_TURN) + Constants.MIN_TURN;
       } else {
         turnRate = -  XJoystick * XJoystick * (1-Constants.MIN_TURN) - Constants.MIN_TURN;
       }
 
-      if(Math.abs(newSpeed) < Constants.speedDeadBand){
+      if(Math.abs(newSpeed) < Constants.SPEED_DEAD_BAND){
         newSpeed = 0;
         } else if ( newSpeed > 0){
           newSpeed = newSpeed * newSpeed * (1-Constants.MIN_POWER) + Constants.MIN_POWER;
@@ -59,8 +57,6 @@ public class DriveWithJoystick extends Command{
 
         
       DriveTrain.turnDrive(newSpeed, turnRate );
-      
-
   }// end of execute
 
   @Override

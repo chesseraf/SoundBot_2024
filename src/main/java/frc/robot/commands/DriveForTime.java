@@ -3,42 +3,52 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.commands;
-
+import frc.robot.subsystems.DriveTrain;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.Shooter;
 
-/** An example command that uses an example subsystem. */
-public class ShootCommand extends Command {
+public class DriveForTime extends Command {
+  private final double speed;
+  private final double turning;
+
+  private int counter = 0;
+  private int target = 0;
+
+  /** Creates a new driveForTime. */
+  public DriveForTime(double driveTime, double speed, double turning) {
+    this.speed = speed;
+    this.turning = turning;
+
+    //50 cycles per second
+    target = (int) (driveTime * 50);
+  }
 
   // Called when the command is initially scheduled.
-  int timer;
   @Override
   public void initialize() {
-    timer = 0;
-    System.out.println("Initialized shoot command");
+    counter = 0;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Shooter.shootMotor.set(shootSpeed(timer));
+    DriveTrain.driveBoth(speed, turning);
+    counter++;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Shooter.shootMotor.set(0);
+    DriveTrain.driveBoth(0, 0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
-  }
-
-  public double shootSpeed(int time)
-  {
-    return(Constants.SHOOTER_SPEED);
+    if(counter<target){
+      return false;
+    }
+    else{
+      return true;
+    }
   }
 }

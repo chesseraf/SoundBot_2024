@@ -9,19 +9,21 @@ public final class Constants {
     public static double SPEED_MULTIPLIER = 1;
 
     // PS4 Constants
-    public static class PS4 {
-        public static final int X = 2, 
-        CIRCLE = 3, SQUARE = 1, TRIANGLE = 4, LB = 5, RB = 6, TOUCHPAD = 9, OPTIONS = 10, L3 = 11, R3 = 12,
-                LEFT_TRIGGER = 3, RIGHT_TRGGER = 4, LEFT_X = 0, LEFT_Y = 1, RIGHT_X = 2, RIGHT_Y = 5;
-    }
+    // public static class PS4 {
+    //     public static final int X = 2, 
+    //     CIRCLE = 3, SQUARE = 1, TRIANGLE = 4, LB = 5, RB = 6, TOUCHPAD = 9, OPTIONS = 10, L3 = 11, R3 = 12,
+    //             LEFT_TRIGGER = 3, RIGHT_TRGGER = 4, LEFT_X = 0, LEFT_Y = 1, RIGHT_X = 2, RIGHT_Y = 5;
+    // }
 
 
     public static final double MAX_ACCELERATION = 0.04;
-    public static final double turnDeadBand = 0.05;
-    public static final double speedDeadBand = 0.05;
+    //public static final double turnDeadBand = 0.05;
+    public static final double SPEED_DEAD_BAND = 0.05;
 
     public static final double INTAKE_MIN_ANGLE_DOWN = 0;
     public static final double INTAKE_MAX_ANGLE_UP = 10;
+
+    public static final double SHOOTER_SPEED = 0.4;
     // port numbers on pdp, computer, pcm...
     
     public static final int 
@@ -32,6 +34,9 @@ public final class Constants {
 
     INTAKE_WHEELS_ID = 2,
     INTAKE_LIFT_MOTORS_ID = 3,
+
+    SHOOT_MOTOR_ID = 4,
+
     THRUSTMASTER_PORT = 0;
     
    
@@ -55,7 +60,7 @@ public final class Constants {
  
     public static final int 
     SHOOT_BUTTON = 1,
-    LOWER_INTAKE_BUTTON = 2,
+    FLIP_INTAKE_BUTTON = 2,
     NUM3_BUTTON = 3,
     NUM4_BUTTON = 4;
     

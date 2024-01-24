@@ -66,7 +66,7 @@ public class RobotContainer {
         {
             shootingCommand.schedule();
         }
-        if(justPressedButtons[Constants.LOWER_INTAKE_BUTTON] && !intakePostitionUsed){
+        if(justPressedButtons[Constants.FLIP_INTAKE_BUTTON] && !intakePostitionUsed){
             if(Intake.intakeUp)
                 intakeLowerCommand.schedule();
             else
