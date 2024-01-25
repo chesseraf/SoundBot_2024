@@ -22,13 +22,14 @@ public class ShootCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    Shooter.shootMotor.set(shootSpeed(timer));
+    Shooter.setShooterMotors(shootSpeed(timer));
+    timer++;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Shooter.shootMotor.set(0);
+    Shooter.setShooterMotors(0);
   }
 
   // Returns true when the command should end.

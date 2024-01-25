@@ -21,7 +21,7 @@ public final class Constants {
     public static final double SPEED_DEAD_BAND = 0.05;
 
     public static final double INTAKE_MIN_ANGLE_DOWN = 0;
-    public static final double INTAKE_MAX_ANGLE_UP = 10;
+    public static final double INTAKE_MAX_ANGLE_UP = 0.2;
 
     public static final double SHOOTER_SPEED = 0.4;
     // port numbers on pdp, computer, pcm...
@@ -35,7 +35,8 @@ public final class Constants {
     INTAKE_WHEELS_ID = 2,
     INTAKE_LIFT_MOTORS_ID = 3,
 
-    SHOOT_MOTOR_ID = 4,
+    SHOOT_MOTOR_ID_Front = 4,
+    SHOOT_MOTOR_ID_Back = 5,
 
     THRUSTMASTER_PORT = 0;
     
@@ -47,9 +48,8 @@ public final class Constants {
 
     INTAKE_LOWER_SPEED = 0.15,
     INTAKE_LIFT_SPEED = 0.15,
-    INTAKE_MAX_DOWN_ANGLE = 10,
-    INTAKE_MAX_UP_ANGLE = 0,
     INTAKE_WHEELS_INTAKE_SPEED = 0.2,
+
     DEGREES_BEFORE_MAX_TO_END = 5;
 
     

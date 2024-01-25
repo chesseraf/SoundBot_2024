@@ -13,6 +13,7 @@ import frc.robot.commands.AutoBackwards;
 import frc.robot.commands.AutoForward;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveTrain;
+import frc.robot.subsystems.Intake;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -32,6 +33,10 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> autoChoice = new SendableChooser<>();
   private String forwardAuto = "forwards auto";
   private String backwardAuto = "backwards auto";
+  private final SendableChooser<Double> shooterSpeedControl = new SendableChooser<>();
+
+
+  private Intake take;
   
 
   /**
@@ -45,6 +50,9 @@ public class Robot extends TimedRobot {
     autoChoice.setDefaultOption("forwards", forwardAuto);
     autoChoice.addOption("backwards", backwardAuto);
     SmartDashboard.putData("Auto choices", autoChoice);
+
+    //shooterSpeedControl.
+    take = new Intake();
 
   }
 
