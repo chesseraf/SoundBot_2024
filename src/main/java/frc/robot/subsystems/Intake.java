@@ -23,6 +23,7 @@ public class Intake {
         limitConfig.ReverseSoftLimitEnable = true;
         limitConfig.ReverseSoftLimitThreshold = Constants.INTAKE_MAX_ANGLE_UP;
         Intake.intakeLiftMotor.getConfigurator().apply(limitConfig);
+        System.out.print("Configured Intake lift motor");
     }
 
     

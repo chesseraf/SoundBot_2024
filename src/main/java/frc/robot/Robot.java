@@ -14,6 +14,9 @@ import frc.robot.commands.AutoForward;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
+import edu.wpi.first.cameraserver.CameraServer;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -45,13 +48,16 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
+    CameraServer.startAutomaticCapture();
+
     DriveTrain.applyConfig();
+
+    //RobotContainer.intakeEncoder.setDistancePerPulse(1.0/256.0);
 
     autoChoice.setDefaultOption("forwards", forwardAuto);
     autoChoice.addOption("backwards", backwardAuto);
     SmartDashboard.putData("Auto choices", autoChoice);
 
-    //shooterSpeedControl.
     take = new Intake();
 
   }
@@ -119,6 +125,9 @@ public class Robot extends TimedRobot {
     //   m_autonomousCommand.cancel();
     // }
     driveCommand.schedule();
+    //Shooter.setShooterMotors(1);
+    // Shooter.shootMotorNumBack.set(0.6);
+    // Shooter.shootMotorNumFront.set(0.6);
   }
 
   /** This function is called periodically during operator control. */
@@ -159,7 +168,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    //Intake.intakeWheels.set(Constants.INTAKE_WHEELS_INTAKE_SPEED);
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override

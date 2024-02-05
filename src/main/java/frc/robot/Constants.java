@@ -23,7 +23,7 @@ public final class Constants {
     public static final double INTAKE_MIN_ANGLE_DOWN = 0;
     public static final double INTAKE_MAX_ANGLE_UP = 0.2;
 
-    public static final double SHOOTER_SPEED = 0.4;
+    public static final double SHOOTER_SPEED = 0.1;
     // port numbers on pdp, computer, pcm...
     
     public static final int 
@@ -48,7 +48,7 @@ public final class Constants {
 
     INTAKE_LOWER_SPEED = 0.15,
     INTAKE_LIFT_SPEED = 0.15,
-    INTAKE_WHEELS_INTAKE_SPEED = 0.2,
+    INTAKE_WHEELS_INTAKE_SPEED = 0.25,
 
     DEGREES_BEFORE_MAX_TO_END = 5;
 

@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveWithJoystick;
@@ -41,7 +45,14 @@ public class RobotContainer {
     public static IntakeLift intakeLiftCommand = new IntakeLift();
 
     public static boolean intakePostitionUsed = false;
-    
+    public static DigitalInput intakeLimitSwitch = new DigitalInput(0);
+    public static boolean disableIntakeWheelsLimitSwitch;
+    public static boolean prevDisableIntakeWheelsLimitSwitch;
+
+    public static boolean intakeWheelsLimitJustReached;
+    public static boolean intakeWheelsLimitJustStopped;
+
+    //public static Encoder intakeEncoder = new Encoder(0, 1);
 
 
 
@@ -51,6 +62,11 @@ public class RobotContainer {
     public static void UpdateJoystick(){
         DriveWithJoystick.XJoystick = THRUSTMASTER.getX();
         DriveWithJoystick.YJoystick = THRUSTMASTER.getY();
+
+        prevDisableIntakeWheelsLimitSwitch = disableIntakeWheelsLimitSwitch;
+        disableIntakeWheelsLimitSwitch = intakeLimitSwitch.get();
+        //nintakeWheelsLimitJustReached = 
+
         for(int i = 0; i<16 ; i++)
         {
             prevButtons[i] = currentButtons[i];
@@ -75,14 +91,13 @@ public class RobotContainer {
     }
 
     public static void SmartBoardUpdate(){
-       // SmartDashboard.putNumber("roll", GYRO.getRoll()-Robot.calibratedGyro);
 
-        SmartDashboard.putNumber("front left motor speed ", DriveTrain.frontLeftMotor.get());
-        SmartDashboard.putNumber("front right motor speed ", DriveTrain.frontRightMotor.get());
-        SmartDashboard.putNumber("back left motor speed ", DriveTrain.backLeftMotor.get());
-        SmartDashboard.putNumber("back right motor speed ", DriveTrain.backRightMotor.get());
-        SmartDashboard.putNumber("right difference ", DriveTrain.backRightMotor.get()-DriveTrain.frontRightMotor.get());
-        SmartDashboard.putNumber("left difference ", DriveTrain.backLeftMotor.get()-DriveTrain.frontLeftMotor.get());
+        SmartDashboard.putNumber("Intake position", Intake.intakeLiftMotor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("front right motor speed ", Intake.intakeLiftMotor.getVelocity().getValueAsDouble());
+        // SmartDashboard.putNumber("back left motor speed ", DriveTrain.backLeftMotor.get());
+        // SmartDashboard.putNumber("back right motor speed ", DriveTrain.backRightMotor.get());
+        // SmartDashboard.putNumber("right difference ", DriveTrain.backRightMotor.get()-DriveTrain.frontRightMotor.get());
+        // SmartDashboard.putNumber("left difference ", DriveTrain.backLeftMotor.get()-DriveTrain.frontLeftMotor.get());
         
     }
 }

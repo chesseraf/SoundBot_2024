@@ -28,7 +28,7 @@ public class IntakeLower extends Command{
     public void end(boolean interrupted) {
         RobotContainer.intakePostitionUsed = false;
         Intake.intakeLiftMotor.set(0);
-        Intake.intakeWheels.set(0);
+        //Intake.intakeWheels.set(0);
         Intake.intakeUp = false;
 
         //System.out.print("lowered Intake");
