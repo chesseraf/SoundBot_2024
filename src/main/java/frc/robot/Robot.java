@@ -48,7 +48,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    CameraServer.startAutomaticCapture();
+   // CameraServer.startAutomaticCapture();
 
     DriveTrain.applyConfig();
 
@@ -164,11 +164,22 @@ public class Robot extends TimedRobot {
   public void testInit() {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
+    //RobotContainer.intakeEncoder.reset();
+    RobotContainer.intakeEncoder.setDistancePerPulse(5.1);
+    //RobotContainer.intakeEncoder.getRaw();
+    //RobotContainer.intakeEncoder.se
   }
 
   /** This function is called periodically during test mode. */
+  double  time = 0;
   @Override
   public void testPeriodic() {
+    time++;
+    System.out.println(time);
+    //SmartDashboard.putNumber("encoder position", time+RobotContainer.intakeEncoder.getDistance());
+    System.out.println("dist"+RobotContainer.intakeEncoder.getDistance()+"   "+    RobotContainer.intakeEncoder.getRaw());
+
+    System.out.println("POS: "+RobotContainer.intakeEncoder.get());
     //Intake.intakeWheels.set(Constants.INTAKE_WHEELS_INTAKE_SPEED);
   }
 

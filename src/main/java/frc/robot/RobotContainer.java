@@ -7,6 +7,8 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DutyCycle;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -52,7 +54,9 @@ public class RobotContainer {
     public static boolean intakeWheelsLimitJustReached;
     public static boolean intakeWheelsLimitJustStopped;
 
-    //public static Encoder intakeEncoder = new Encoder(0, 1);
+    public static Encoder intakeEncoder = new Encoder(6,7, false);
+    
+    //public static DutyCycleEncoder intakEncoder = new DutyCycleEncoder(0)
 
 
 
@@ -92,8 +96,11 @@ public class RobotContainer {
 
     public static void SmartBoardUpdate(){
 
-        SmartDashboard.putNumber("Intake position", Intake.intakeLiftMotor.getPosition().getValueAsDouble());
-        SmartDashboard.putNumber("front right motor speed ", Intake.intakeLiftMotor.getVelocity().getValueAsDouble());
+//        SmartDashboard.putNumber("Intake position", Intake.intakeLiftMotor.getPosition().getValueAsDouble());
+//        SmartDashboard.putNumber("front right motor speed ", Intake.intakeLiftMotor.getVelocity().getValueAsDouble());
+        SmartDashboard.putNumber("encoder position", RobotContainer.intakeEncoder.getDistance());
+        //SmartDashboard.putNumber("encoder position", RobotContainer.intakeEncoder.getDistance());
+
         // SmartDashboard.putNumber("back left motor speed ", DriveTrain.backLeftMotor.get());
         // SmartDashboard.putNumber("back right motor speed ", DriveTrain.backRightMotor.get());
         // SmartDashboard.putNumber("right difference ", DriveTrain.backRightMotor.get()-DriveTrain.frontRightMotor.get());
@@ -101,3 +108,4 @@ public class RobotContainer {
         
     }
 }
+
