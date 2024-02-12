@@ -50,6 +50,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
    // CameraServer.startAutomaticCapture();
+    RobotContainer.intakeEncoder.setDistancePerRotation(256);
 
     DriveTrain.applyConfig();
 
@@ -75,6 +76,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     RobotContainer.SmartBoardUpdate();
     RobotContainer.activateButton();
+    Intake.intakeLiftMotor.setPosition(RobotContainer.intakeEncoder.getAbsolutePosition());
 
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
@@ -133,57 +135,17 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {
-/* 
-    RobotContainer.UpdateJoystick();
-  
-    speed =   -YJoystick;
-    turnRate = -XJoystick;
-
-      // if(Math.abs(turnRate) < Constants.turnDeadBand) {
-      //   turnRate = 0;
-      // } else if (turnRate < 0) {
-      //   turnRate = (turnRate * turnRate) * (1-Constants.MIN_TURN) + Constants.MIN_TURN;
-      // } else {
-      //   turnRate = -  XJoystick * XJoystick * (1-Constants.MIN_TURN) - Constants.MIN_TURN;
-      // }
-
-      // if(Math.abs(speed) < Constants.speedDeadBand){
-      //   speed = 0;
-      // } else if ( speed > 0){
-      //   speed = speed * speed * (1-Constants.MIN_POWER) + Constants.MIN_POWER;
-      // } else {
-      //   speed = - speed * speed * (1-Constants.MIN_POWER) - Constants.MIN_POWER;
-      // }
-      
-        System.out.println("Here!"+"speed"+speed+"turn"+turnRate);
-      train.turnDrive(speed, turnRate );
-      */
-  }
+  public void teleopPeriodic() {  }
 
   @Override
   public void testInit() {
-    // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
-    //RobotContainer.intakeEncoder.reset();
-    RobotContainer.intakeEncoder.setDistancePerRotation(256);
-    //RobotContainer.intakeEncoder = new DutyCycleEncoder(6);
-    //RobotContainer.intakeEncoder.getRaw();
-    //RobotContainer.intakeEncoder.se
+    
   }
 
   /** This function is called periodically during test mode. */
-  double  time = 0;
   @Override
-  public void testPeriodic() {
-    time++;
-  //  System.out.println(time);
-    //SmartDashboard.putNumber("encoder position", time+RobotContainer.intakeEncoder.getDistance());
-    System.out.println("dist"+RobotContainer.intakeEncoder.getAbsolutePosition());
-
-//    System.out.println("POS: "+RobotContainer.intakeEncoder.get());
-    //Intake.intakeWheels.set(Constants.INTAKE_WHEELS_INTAKE_SPEED);
-  }
+  public void testPeriodic() {  }
 
   /** This function is called once when the robot is first started up. */
   @Override
