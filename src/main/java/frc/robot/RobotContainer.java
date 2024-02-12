@@ -54,12 +54,9 @@ public class RobotContainer {
     public static boolean intakeWheelsLimitJustReached;
     public static boolean intakeWheelsLimitJustStopped;
 
-    public static Encoder intakeEncoder = new Encoder(6,7, false);
+    public static DutyCycleEncoder intakeEncoder = new DutyCycleEncoder(6);
     
     //public static DutyCycleEncoder intakEncoder = new DutyCycleEncoder(0)
-
-
-
    // private final  JoystickButton orangeButton = new JoystickButton(THRUSTMASTER, pistonTimer);
   
 
@@ -98,7 +95,7 @@ public class RobotContainer {
 
 //        SmartDashboard.putNumber("Intake position", Intake.intakeLiftMotor.getPosition().getValueAsDouble());
 //        SmartDashboard.putNumber("front right motor speed ", Intake.intakeLiftMotor.getVelocity().getValueAsDouble());
-        SmartDashboard.putNumber("encoder position", RobotContainer.intakeEncoder.getDistance());
+        SmartDashboard.putNumber("encoder position", RobotContainer.intakeEncoder.getAbsolutePosition());
         //SmartDashboard.putNumber("encoder position", RobotContainer.intakeEncoder.getDistance());
 
         // SmartDashboard.putNumber("back left motor speed ", DriveTrain.backLeftMotor.get());

@@ -5,6 +5,7 @@
 package frc.robot;
 
 
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -165,7 +166,8 @@ public class Robot extends TimedRobot {
     // Cancels all running commands at the start of test mode.
     CommandScheduler.getInstance().cancelAll();
     //RobotContainer.intakeEncoder.reset();
-    RobotContainer.intakeEncoder.setDistancePerPulse(5.1);
+    RobotContainer.intakeEncoder.setDistancePerRotation(256);
+    //RobotContainer.intakeEncoder = new DutyCycleEncoder(6);
     //RobotContainer.intakeEncoder.getRaw();
     //RobotContainer.intakeEncoder.se
   }
@@ -175,11 +177,11 @@ public class Robot extends TimedRobot {
   @Override
   public void testPeriodic() {
     time++;
-    System.out.println(time);
+  //  System.out.println(time);
     //SmartDashboard.putNumber("encoder position", time+RobotContainer.intakeEncoder.getDistance());
-    System.out.println("dist"+RobotContainer.intakeEncoder.getDistance()+"   "+    RobotContainer.intakeEncoder.getRaw());
+    System.out.println("dist"+RobotContainer.intakeEncoder.getAbsolutePosition());
 
-    System.out.println("POS: "+RobotContainer.intakeEncoder.get());
+//    System.out.println("POS: "+RobotContainer.intakeEncoder.get());
     //Intake.intakeWheels.set(Constants.INTAKE_WHEELS_INTAKE_SPEED);
   }
 
