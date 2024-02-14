@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
-import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveWithJoystick;
@@ -63,7 +62,6 @@ public class RobotContainer {
     public static void UpdateJoystick(){
         DriveWithJoystick.XJoystick = THRUSTMASTER.getX();
         DriveWithJoystick.YJoystick = THRUSTMASTER.getY();
-
         prevDisableIntakeWheelsLimitSwitch = disableIntakeWheelsLimitSwitch;
         disableIntakeWheelsLimitSwitch = intakeLimitSwitch.get();
         //nintakeWheelsLimitJustReached = 
@@ -95,6 +93,7 @@ public class RobotContainer {
     {
 
         SmartDashboard.putNumber("encoder position", RobotContainer.intakeEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Intake lift position", Intake.intakeLiftMotor.getPosition().getValue());
        
     }
 }

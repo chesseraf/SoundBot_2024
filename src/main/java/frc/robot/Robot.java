@@ -40,7 +40,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<Double> shooterSpeedControl = new SendableChooser<>();
 
 
-  private Intake take;
+  private Intake take = new Intake();
   
 
   /**
@@ -50,7 +50,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
    // CameraServer.startAutomaticCapture();
-    RobotContainer.intakeEncoder.setDistancePerRotation(256);
+    RobotContainer.intakeEncoder.setDistancePerRotation(48);
 
     DriveTrain.applyConfig();
 
@@ -76,7 +76,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     RobotContainer.SmartBoardUpdate();
     RobotContainer.activateButton();
-    Intake.intakeLiftMotor.setPosition(RobotContainer.intakeEncoder.getAbsolutePosition());
+    Intake.intakeLiftMotor.setPosition(-1000*RobotContainer.intakeEncoder.getAbsolutePosition());
 
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
@@ -140,12 +140,14 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     CommandScheduler.getInstance().cancelAll();
-    
   }
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {  }
+  public void testPeriodic() {  
+        Intake.intakeLiftMotor.set(RobotContainer.THRUSTMASTER.getX()/10);
+
+  }
 
   /** This function is called once when the robot is first started up. */
   @Override

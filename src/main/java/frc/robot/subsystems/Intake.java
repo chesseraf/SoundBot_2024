@@ -12,10 +12,8 @@ public class Intake {
     public static boolean intakeUp = true;
     public static final OpenLoopRampsConfigs configIntakeLift = new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0.5);
 
-     SoftwareLimitSwitchConfigs limitConfig = new SoftwareLimitSwitchConfigs();
+    SoftwareLimitSwitchConfigs limitConfig = new SoftwareLimitSwitchConfigs();
     // limitConfig.ForwardSoftLimitEnable(true);
-
-    
 
     public Intake(){
         limitConfig.ForwardSoftLimitEnable = true;

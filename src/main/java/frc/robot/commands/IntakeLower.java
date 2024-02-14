@@ -18,6 +18,8 @@ public class IntakeLower extends Command{
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
+        System.out.print("lowering");
+
         Intake.intakeLiftMotor.set(Constants.INTAKE_LOWER_SPEED);
         Intake.intakeWheels.set(Constants.INTAKE_WHEELS_INTAKE_SPEED);
         timer ++;

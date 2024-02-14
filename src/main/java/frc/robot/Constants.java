@@ -20,8 +20,17 @@ public final class Constants {
     //public static final double turnDeadBand = 0.05;
     public static final double SPEED_DEAD_BAND = 0.05;
 
-    public static final double INTAKE_MIN_ANGLE_DOWN = 0;
-    public static final double INTAKE_MAX_ANGLE_UP = 0.2;
+    public static final double INTAKE_MIN_ANGLE_DOWN = -1000*0.25;//.7*48; right, counter clock
+    public static final double INTAKE_MAX_ANGLE_UP = -1000*0.75;//.7*48; left, away
+/**
+ * counter clockwise shaft increses encoder
+ * with negatives, spins  clockwise
+ * positives --> counter clockwise
+ * 
+ * DOWN --> counter clockwise
+ * UP --> clockwise
+ */
+
 
     public static final double SHOOTER_SPEED = 0.1;
     // port numbers on pdp, computer, pcm...
