@@ -77,15 +77,23 @@ public class RobotContainer {
 
     public static void activateButton()
     {
+        //System.out.println("command scheduling");
+
         if(justPressedButtons[Constants.SHOOT_BUTTON])
         {
             shootingCommand.schedule();
         }
         if(justPressedButtons[Constants.FLIP_INTAKE_BUTTON] && !intakePostitionUsed){
             if(Intake.intakeUp)
+            {                
                 intakeLowerCommand.schedule();
+                System.out.println("lower command scheduling");
+            }
             else
+            {
                 intakeLiftCommand.schedule();
+                System.out.println("lift command scheduling");
+            }
         }
     }
 

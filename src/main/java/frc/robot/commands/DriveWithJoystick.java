@@ -26,7 +26,6 @@ public class DriveWithJoystick extends Command{
 
   @Override
   public void execute() {
-    RobotContainer.UpdateJoystick();
   
     newSpeed =   -YJoystick;
     turnRate = XJoystick;

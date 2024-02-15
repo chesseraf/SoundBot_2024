@@ -39,6 +39,8 @@ public class Robot extends TimedRobot {
   private String backwardAuto = "backwards auto";
   private final SendableChooser<Double> shooterSpeedControl = new SendableChooser<>();
 
+  public static double intakePos;
+
 
   private Intake take = new Intake();
   
@@ -73,10 +75,13 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    RobotContainer.UpdateJoystick();
+
     CommandScheduler.getInstance().run();
     RobotContainer.SmartBoardUpdate();
     RobotContainer.activateButton();
-    Intake.intakeLiftMotor.setPosition(-1000*RobotContainer.intakeEncoder.getAbsolutePosition());
+    intakePos = -RobotContainer.intakeEncoder.getAbsolutePosition();
+    Intake.intakeLiftMotor.setPosition(intakePos);
 
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
@@ -145,7 +150,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {  
-        Intake.intakeLiftMotor.set(RobotContainer.THRUSTMASTER.getX()/10);
+        Intake.intakeLiftMotor.set(0.1);//RobotContainer.THRUSTMASTER.getX()/10);
 
   }
 

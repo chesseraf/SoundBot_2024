@@ -20,8 +20,8 @@ public final class Constants {
     //public static final double turnDeadBand = 0.05;
     public static final double SPEED_DEAD_BAND = 0.05;
 
-    public static final double INTAKE_MIN_ANGLE_DOWN = -1000*0.25;//.7*48; right, counter clock
-    public static final double INTAKE_MAX_ANGLE_UP = -1000*0.75;//.7*48; left, away
+    public static final double INTAKE_MIN_ANGLE_DOWN = -0.25;//.7*48; right, counter clock
+    public static final double INTAKE_MAX_ANGLE_UP = -0.75;//.7*48; left, away
 /**
  * counter clockwise shaft increses encoder
  * with negatives, spins  clockwise
@@ -56,10 +56,10 @@ public final class Constants {
     MIN_TURN = 0.1,
 
     INTAKE_LOWER_SPEED = 0.15,
-    INTAKE_LIFT_SPEED = 0.15,
+    INTAKE_LIFT_SPEED = -0.15,
     INTAKE_WHEELS_INTAKE_SPEED = 0.25,
 
-    DEGREES_BEFORE_MAX_TO_END = 5;
+    DEGREES_BEFORE_MAX_TO_END = 0.01;
 
     
     //public static Button  bu= new But()
