@@ -37,7 +37,8 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> autoChoice = new SendableChooser<>();
   private String forwardAuto = "forwards auto";
   private String backwardAuto = "backwards auto";
-  private final SendableChooser<Double> shooterSpeedControl = new SendableChooser<>();
+ 
+ // private final SendableChooser<Double> shooterSpeedControl = new SendableChooser<>();
 
   public static double intakePos;
 
@@ -81,6 +82,13 @@ public class Robot extends TimedRobot {
     RobotContainer.SmartBoardUpdate();
     RobotContainer.activateButton();
     intakePos = -RobotContainer.intakeEncoder.getAbsolutePosition();
+    intakePos -= Constants.EncoderOffset;
+
+    if(intakePos<0)
+    {
+      intakePos += 1;
+    }
+
     Intake.intakeLiftMotor.setPosition(intakePos);
 
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled

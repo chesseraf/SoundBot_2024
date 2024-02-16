@@ -13,6 +13,7 @@ public class IntakeLower extends Command{
     @Override
     public void initialize() {
         RobotContainer.intakePostitionUsed = true;
+        Intake.intakeWheels.set(Constants.INTAKE_WHEELS_INTAKE_SPEED);
         timer = 0;
     }
   
@@ -22,7 +23,7 @@ public class IntakeLower extends Command{
         System.out.println("lowering");
 
         Intake.intakeLiftMotor.set(Constants.INTAKE_LOWER_SPEED);
-        Intake.intakeWheels.set(Constants.INTAKE_WHEELS_INTAKE_SPEED);
+        
         timer ++;
     }
   

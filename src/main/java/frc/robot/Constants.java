@@ -22,18 +22,15 @@ public final class Constants {
 
     public static final double INTAKE_MIN_ANGLE_DOWN = -0.25;//.7*48; right, counter clock
     public static final double INTAKE_MAX_ANGLE_UP = -0.75;//.7*48; left, away
-/**
- * counter clockwise shaft increses encoder
- * with negatives, spins  clockwise
- * positives --> counter clockwise
- * 
- * DOWN --> counter clockwise
- * UP --> clockwise
- */
 
+    public static final double EncoderOffset = 0;
+    //to avoid problems going from 1 to 0, change the absolute 0 location
 
     public static final double SHOOTER_SPEED = 0.1;
     // port numbers on pdp, computer, pcm...
+
+    public static final int SHOOTER_TOP_WHEEL_ID = 13,
+    SHOOTER_LOWER_WHEEL_ID = 11;
     
     public static final int 
     FRONT_LEFT_ID = 13,//13

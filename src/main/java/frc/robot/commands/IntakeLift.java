@@ -13,6 +13,8 @@ public class IntakeLift extends Command{
     @Override
     public void initialize() {
         RobotContainer.intakePostitionUsed = true;
+        Intake.intakeLiftMotor.set(Constants.INTAKE_LIFT_SPEED);
+        Intake.intakeWheels.set(0);
         timer = 0;
     }
   
@@ -20,8 +22,8 @@ public class IntakeLift extends Command{
     @Override
     public void execute() {
         System.out.print("lifting");
-        Intake.intakeLiftMotor.set(Constants.INTAKE_LIFT_SPEED);
-        Intake.intakeWheels.set(0);
+        // Intake.intakeLiftMotor.set(Constants.INTAKE_LIFT_SPEED);
+        // Intake.intakeWheels.set(0);
         timer++;
     }
   

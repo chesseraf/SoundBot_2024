@@ -4,10 +4,8 @@
 
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -46,12 +44,12 @@ public class RobotContainer {
     public static IntakeLift intakeLiftCommand = new IntakeLift();
 
     public static boolean intakePostitionUsed = false;
-    public static DigitalInput intakeLimitSwitch = new DigitalInput(0);
-    public static boolean disableIntakeWheelsLimitSwitch;
-    public static boolean prevDisableIntakeWheelsLimitSwitch;
+    public static DigitalInput intakeLimitSwitch = new DigitalInput(7);
+    public static boolean pressedIntakeNoteLimitSwitch;
+    public static boolean prevpressedIntakeNoteLimitSwitch;
 
-    public static boolean intakeWheelsLimitJustReached;
-    public static boolean intakeWheelsLimitJustStopped;
+    public static boolean intakeNoteLimitJustPressed;
+    public static boolean intakeNoteLimitJustUnpressed;
 
     public static DutyCycleEncoder intakeEncoder = new DutyCycleEncoder(5);
     
@@ -62,9 +60,12 @@ public class RobotContainer {
     public static void UpdateJoystick(){
         DriveWithJoystick.XJoystick = THRUSTMASTER.getX();
         DriveWithJoystick.YJoystick = THRUSTMASTER.getY();
-        prevDisableIntakeWheelsLimitSwitch = disableIntakeWheelsLimitSwitch;
-        disableIntakeWheelsLimitSwitch = intakeLimitSwitch.get();
-        //nintakeWheelsLimitJustReached = 
+        prevpressedIntakeNoteLimitSwitch = pressedIntakeNoteLimitSwitch;
+        pressedIntakeNoteLimitSwitch = intakeLimitSwitch.get();
+
+        intakeNoteLimitJustPressed = pressedIntakeNoteLimitSwitch && !prevpressedIntakeNoteLimitSwitch;
+        intakeNoteLimitJustUnpressed = !pressedIntakeNoteLimitSwitch && prevpressedIntakeNoteLimitSwitch;
+
 
         for(int i = 0; i<16 ; i++)
         {
@@ -95,6 +96,12 @@ public class RobotContainer {
                 System.out.println("lift command scheduling");
             }
         }
+        
+        if(intakeNoteLimitJustPressed)
+        {
+            intakeLiftCommand.schedule();
+            System.out.println("NOTE JUST PRESSED LIMIT!\nlift command scheduling");
+        }
     }
 
     public static void SmartBoardUpdate()
@@ -102,7 +109,8 @@ public class RobotContainer {
 
         SmartDashboard.putNumber("encoder position", RobotContainer.intakeEncoder.getAbsolutePosition());
         SmartDashboard.putNumber("Intake lift position", Intake.intakeLiftMotor.getPosition().getValue());
-       
+        SmartDashboard.putBoolean("Limit switch pressed: ", !pressedIntakeNoteLimitSwitch);
+
     }
 }
 
