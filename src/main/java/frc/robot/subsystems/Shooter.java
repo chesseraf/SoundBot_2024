@@ -8,13 +8,21 @@ public class Shooter extends Command{
     //public static TalonFX shootMotorNumFront = new TalonFX(Constants.SHOOT_MOTOR_ID_Front);
     //public static TalonFX shootMotorNumBack = new TalonFX(Constants.SHOOT_MOTOR_ID_Back);
     
-    public static CANSparkMax shootMotorNumFront = new CANSparkMax(Constants.SHOOTER_TOP_WHEEL_ID, com.revrobotics.CANSparkLowLevel.MotorType.kBrushed);
-    public static CANSparkMax shootMotorNumBack = new CANSparkMax(Constants.SHOOTER_LOWER_WHEEL_ID, com.revrobotics.CANSparkLowLevel.MotorType.kBrushed);
+    public static CANSparkMax shootMotorNumOuter = new CANSparkMax(Constants.SHOOTER_TOP_WHEEL_ID, com.revrobotics.CANSparkLowLevel.MotorType.kBrushed);
+    public static CANSparkMax shootMotorNumInner = new CANSparkMax(Constants.SHOOTER_LOWER_WHEEL_ID, com.revrobotics.CANSparkLowLevel.MotorType.kBrushed);
 
-    public static void setShooterMotors(double speed)
+    public static void setShooterMotors(double outerSpeed, double innerSpeed)
     {
-        shootMotorNumBack.set(speed);
-        shootMotorNumFront.set(speed);
+        shootMotorNumInner.set(innerSpeed);
+        shootMotorNumOuter.set(outerSpeed);
+    }
+    public static void spinShooter()
+    {
+        setShooterMotors(Constants.SHOOTER_OUTER_SPEED, Constants.SHOOTER_INNER_SPEED);
+    }
+    public static void stop()
+    {
+        setShooterMotors(0, 0);
     }
 
 }

@@ -36,6 +36,7 @@ public class IntakeLower extends Command{
         Intake.intakeLiftMotor.set(0);
         //Intake.intakeWheels.set(0);
         Intake.intakeUp = false;
+        RobotContainer.sameNote = false;
 
         //System.out.print("lowered Intake");
     }

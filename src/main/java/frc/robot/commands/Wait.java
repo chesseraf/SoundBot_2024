@@ -1,12 +1,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.Intake;
 
 public class Wait extends Command {
     int timer;
-    int target;
+    double target;
 
-    public Wait(int seconds)
+    public Wait(double seconds)
     {
         target = seconds*50;
     }

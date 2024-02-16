@@ -27,6 +27,10 @@ public final class Constants {
     //to avoid problems going from 1 to 0, change the absolute 0 location
 
     public static final double SHOOTER_SPEED = 0.1;
+    public static final double SHOOTER_OUTER_SPEED = 0.2;
+    public static final double SHOOTER_INNER_SPEED = -0.1;
+    public static final double DELAY_AFTER_STOPPING_INTAKE_AND_LIFTING = 0.5;
+
     // port numbers on pdp, computer, pcm...
 
     public static final int SHOOTER_TOP_WHEEL_ID = 13,
@@ -55,6 +59,8 @@ public final class Constants {
     INTAKE_LOWER_SPEED = 0.15,
     INTAKE_LIFT_SPEED = -0.15,
     INTAKE_WHEELS_INTAKE_SPEED = 0.25,
+
+    INTAKE_REVERSE_SHOOT_SPEED = -0.25,
 
     DEGREES_BEFORE_MAX_TO_END = 0.01;
 

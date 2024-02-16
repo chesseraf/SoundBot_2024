@@ -13,6 +13,7 @@ import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.IntakeLift;
 import frc.robot.commands.IntakeLower;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.Wait;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 /**
@@ -51,6 +52,8 @@ public class RobotContainer {
     public static boolean intakeNoteLimitJustPressed;
     public static boolean intakeNoteLimitJustUnpressed;
 
+    public static boolean sameNote = false;
+
     public static DutyCycleEncoder intakeEncoder = new DutyCycleEncoder(5);
     
     //public static DutyCycleEncoder intakEncoder = new DutyCycleEncoder(0)
@@ -80,7 +83,7 @@ public class RobotContainer {
     {
         //System.out.println("command scheduling");
 
-        if(justPressedButtons[Constants.SHOOT_BUTTON])
+        if(justPressedButtons[Constants.SHOOT_BUTTON] && !ShootCommand.currentlyShooting)
         {
             shootingCommand.schedule();
         }
@@ -96,10 +99,13 @@ public class RobotContainer {
                 System.out.println("lift command scheduling");
             }
         }
-        
-        if(intakeNoteLimitJustPressed)
+
+        //same note is false when the intake is lowered
+        if(intakeNoteLimitJustPressed && !sameNote)
         {
-            intakeLiftCommand.schedule();
+            sameNote = true;
+            Intake.intakeWheels.set(0);
+            (new Wait(Constants.DELAY_AFTER_STOPPING_INTAKE_AND_LIFTING)).andThen(intakeLiftCommand).schedule();
             System.out.println("NOTE JUST PRESSED LIMIT!\nlift command scheduling");
         }
     }
