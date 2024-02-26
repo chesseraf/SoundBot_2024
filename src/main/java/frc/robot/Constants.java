@@ -29,7 +29,9 @@ public final class Constants {
     public static final double SHOOTER_SPEED = 0.1;
     public static final double SHOOTER_OUTER_SPEED = 0.2;
     public static final double SHOOTER_INNER_SPEED = -0.1;
-    public static final double DELAY_AFTER_STOPPING_INTAKE_AND_LIFTING = 0.5;
+    public static final double DELAY_AFTER_STOPPING_INTAKE_AND_LIFTING = 0.5,
+    DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE = 1 * 50 //cycles
+    ;
 
     // port numbers on pdp, computer, pcm...
 
