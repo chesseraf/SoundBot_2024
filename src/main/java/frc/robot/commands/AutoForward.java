@@ -9,14 +9,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 public final class AutoForward extends Command{
   @Override
   public void initialize() {
-    (new DriveForTime(2, 0.1, 0)).andThen
+    //negative is towards the goal
+    // positive speed is towards the other note
+    (new DriveForTime(2, -0.1, 0)).andThen
     (new ShootCommand()).andThen
     (new IntakeLower()).andThen
     (new Wait(1)).andThen
-    (new DriveForTime(2, -0.2, 0)).andThen
+    (new AutoObtainSecondNote()).andThen
     (new Wait(1)).andThen
-    (new DriveForTime(2, 0.2, 0)).andThen
-    (new ShootCommand())
+    (new ShootCommand()).andThen
+    (new Wait(0.5)).andThen
+    (new DriveForTime(2, 0.3, 0))
     .schedule();
   }
 

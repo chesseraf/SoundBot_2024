@@ -36,8 +36,8 @@ public class DriveTrain extends SubsystemBase{
 
   public static void driveBoth(double forwardPercent, double rotationPercent)
   {
-    backDrive.arcadeDrive(forwardPercent, rotationPercent);
-    frontDrive.arcadeDrive(forwardPercent, rotationPercent);
+    backDrive.arcadeDrive(forwardPercent, -rotationPercent);
+    frontDrive.arcadeDrive(forwardPercent, -rotationPercent);
   }
 
   public static void turnDrive(double forwardPercent, double rotationPercent) {

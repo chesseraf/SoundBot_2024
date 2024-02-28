@@ -33,6 +33,8 @@ public final class Constants {
     DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE = 1 * 50 //cycles
     ;
 
+    public static final double AUTO_OBTAIN_SECOND_NOTE_SPEED = 0.3;
+    public static final double ATUO_DRIVE_BACK_SECONDS = 3;
     // port numbers on pdp, computer, pcm...
 
     public static final int SHOOTER_TOP_WHEEL_ID = 13,
