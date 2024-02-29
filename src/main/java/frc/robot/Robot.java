@@ -33,11 +33,22 @@ public class Robot extends TimedRobot {
   private DriveWithJoystick driveCommand =  new DriveWithJoystick();
   private AutoForward autoForwardCommand =  new AutoForward();
   private AutoBackwards autoBackCommand = new AutoBackwards();
-  private String autoChosen;
-  private final SendableChooser<String> autoChoice = new SendableChooser<>();
-  private String forwardAuto = "forwards auto";
-  private String backwardAuto = "backwards auto";
- 
+  private String retreatChosen, shootSequenceChosen;
+
+
+  private final SendableChooser<String> autoRetreatChoice = new SendableChooser<>();
+  private final SendableChooser<String> autoShootingSequence = new SendableChooser<>();
+  
+  private String dontRetreat = "No retreat", backRetreat = "retreat back", leftRetreat = "left retreat", rightRetreat = "right retreat";
+
+  private String shootTwice = "shooting twice";
+  private String shootOnceObtainSecond = "obtain second, dont shoot it";
+  private String shootOnce = "shoot one time";
+  private String dontShoot = "zero shots";
+
+
+  
+  
  // private final SendableChooser<Double> shooterSpeedControl = new SendableChooser<>();
 
   public static double intakePos;
@@ -59,9 +70,20 @@ public class Robot extends TimedRobot {
 
     //RobotContainer.intakeEncoder.setDistancePerPulse(1.0/256.0);
 
-    autoChoice.setDefaultOption("forwards", forwardAuto);
-    autoChoice.addOption("backwards", backwardAuto);
-    SmartDashboard.putData("Auto choices", autoChoice);
+
+    autoShootingSequence.setDefaultOption(shootTwice, shootTwice);
+    autoShootingSequence.addOption(shootOnceObtainSecond, shootOnceObtainSecond);
+    autoShootingSequence.addOption(shootOnce, shootOnce);
+    autoShootingSequence.addOption(dontShoot, dontShoot);
+
+    autoRetreatChoice.setDefaultOption(dontRetreat, dontRetreat);
+    autoRetreatChoice.addOption(backRetreat, backRetreat);
+    autoRetreatChoice.addOption(leftRetreat, leftRetreat);
+    autoRetreatChoice.addOption(rightRetreat, rightRetreat);
+
+    
+    SmartDashboard.putData("Retreat choices", autoRetreatChoice);
+    SmartDashboard.putData("Shooting sequence", autoShootingSequence);
 
     take = new Intake();
 
@@ -111,18 +133,22 @@ public class Robot extends TimedRobot {
 
 
     
-    autoChosen = autoChoice.getSelected();
-    System.out.println("Auto selected: " + autoChosen);
+    retreatChosen = autoRetreatChoice.getSelected();
 
-    if(autoChosen.equals(forwardAuto))
-    {
+    shootSequenceChosen = autoShootingSequence.getSelected();
+    System.out.println("Auto selected: " + retreatChosen +"  and "+ shootSequenceChosen);
 
-      autoForwardCommand.schedule();
-    }
-    else if(autoChosen.equals(backwardAuto))
-    {
-      autoBackCommand.schedule();
-    }
+
+
+    // if(autoChosen.equals(forwardAuto))
+    // {
+
+    //   autoForwardCommand.schedule();
+    // }
+    // else if(autoChosen.equals(backwardAuto))
+    // {
+    //   autoBackCommand.schedule();
+    // }
     
   }
 

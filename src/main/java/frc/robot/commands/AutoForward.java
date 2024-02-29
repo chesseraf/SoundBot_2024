@@ -11,8 +11,7 @@ public final class AutoForward extends Command{
   public void initialize() {
     //negative is towards the goal
     // positive speed is towards the other note
-    (new DriveForTime(2, -0.1, 0)).andThen
-    (new ShootCommand()).andThen
+    (new AutoShootFirstNote()).andThen
     (new IntakeLower()).andThen
     (new Wait(1)).andThen
     (new AutoObtainSecondNote()).andThen
