@@ -20,10 +20,10 @@ public final class Constants {
     //public static final double turnDeadBand = 0.05;
     public static final double SPEED_DEAD_BAND = 0.05;
 
-    public static final double INTAKE_MIN_ANGLE_DOWN = -0.25;//.7*48; right, counter clock
-    public static final double INTAKE_MAX_ANGLE_UP = -0.75;//.7*48; left, away
+    public static final double INTAKE_MIN_ANGLE_DOWN = 21;//.7*48; right, counter clock was -0.25
+    public static final double INTAKE_MAX_ANGLE_UP = 235;//.7*48; left, away was -0.75
 
-    public static final double EncoderOffset = 0;
+    public static final double EncoderOffset = -72;
     //to avoid problems going from 1 to 0, change the absolute 0 location
 
     public static final double SHOOTER_SPEED = 0.1;
@@ -60,8 +60,8 @@ public final class Constants {
     MIN_POWER = 0.15,
     MIN_TURN = 0.1,
 
-    INTAKE_LOWER_SPEED = 0.15,
-    INTAKE_LIFT_SPEED = -0.15,
+    INTAKE_LOWER_SPEED = 0.1,
+    INTAKE_LIFT_SPEED = -0.1,
     INTAKE_WHEELS_INTAKE_SPEED = 0.25,
 
     INTAKE_REVERSE_SHOOT_SPEED = -0.25,
@@ -78,7 +78,8 @@ public final class Constants {
     SHOOT_BUTTON = 1,
     FLIP_INTAKE_BUTTON = 2,
     NUM3_BUTTON = 3,
-    NUM4_BUTTON = 4;
+    NUM4_BUTTON = 4,
+    STOP_PULSING_BUTTON = 5;
     
     //public static final int[] BUTTON_ARR = {SHOOT_BUTTON};
     

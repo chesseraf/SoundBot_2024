@@ -14,7 +14,6 @@ public class IntakeLift extends Command{
     public void initialize() {
 
 
-
         RobotContainer.intakePostitionUsed = true;
         Intake.intakeLiftMotor.set(Constants.INTAKE_LIFT_SPEED);
         Intake.intakeWheels.set(0);

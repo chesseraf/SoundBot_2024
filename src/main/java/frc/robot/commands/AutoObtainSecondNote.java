@@ -10,6 +10,12 @@ import frc.robot.subsystems.Intake;
 public class AutoObtainSecondNote extends Command{
 
     int timer;
+    boolean comeBack;
+
+    public AutoObtainSecondNote(boolean comeBack)
+    {
+      this.comeBack = comeBack;
+    }
 
     @Override
   public void initialize() {
@@ -31,7 +37,13 @@ public class AutoObtainSecondNote extends Command{
   @Override
   public void end(boolean interrupted) {
     DriveTrain.driveBoth(0, 0);
-    (new Wait(0.5)).andThen(new DriveForTime(timer/50.0 ,-Constants.AUTO_OBTAIN_SECOND_NOTE_SPEED, 0.0)).schedule();
+    if(comeBack)
+    {
+        (new Wait(0.5))
+        .andThen(new DriveForTime(timer/50.0 ,-Constants.AUTO_OBTAIN_SECOND_NOTE_SPEED, 0.0))
+        .andThen(new ShootCommand()).schedule();
+    }
+    
 
   }
 

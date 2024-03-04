@@ -31,7 +31,6 @@ public class IntakeLower extends Command{
     @Override
     public void end(boolean interrupted) {
         System.out.println("DONE lowering");
-
         RobotContainer.intakePostitionUsed = false;
         Intake.intakeLiftMotor.set(0);
         //Intake.intakeWheels.set(0);

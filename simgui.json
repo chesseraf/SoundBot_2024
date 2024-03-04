@@ -44,11 +44,16 @@
   "NTProvider": {
     "types": {
       "/FMSInfo": "FMSInfo",
-      "/SmartDashboard/Auto choices": "String Chooser"
+      "/SmartDashboard/Auto choices": "String Chooser",
+      "/SmartDashboard/Retreat choices": "String Chooser",
+      "/SmartDashboard/Shooting sequence": "String Chooser"
     }
   },
   "NetworkTables": {
     "transitory": {
+      "LiveWindow": {
+        "open": true
+      },
       "Shuffleboard": {
         "open": true
       },

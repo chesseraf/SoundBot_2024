@@ -17,9 +17,9 @@ public class Intake {
 
     public Intake(){
         limitConfig.ForwardSoftLimitEnable = true;
-        limitConfig.ForwardSoftLimitThreshold = Constants.INTAKE_MIN_ANGLE_DOWN;
+        limitConfig.ForwardSoftLimitThreshold = Constants.INTAKE_MAX_ANGLE_UP;
         limitConfig.ReverseSoftLimitEnable = true;
-        limitConfig.ReverseSoftLimitThreshold = Constants.INTAKE_MAX_ANGLE_UP;
+        limitConfig.ReverseSoftLimitThreshold = Constants.INTAKE_MIN_ANGLE_DOWN;
         Intake.intakeLiftMotor.getConfigurator().apply(limitConfig);
         System.out.print("Configured Intake lift motor");
     }

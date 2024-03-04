@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.IntakeLift;
 import frc.robot.commands.IntakeLower;
+import frc.robot.commands.IntakePulse;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.Wait;
 import frc.robot.subsystems.DriveTrain;
@@ -54,7 +55,7 @@ public class RobotContainer {
 
     public static boolean sameNote = false;
 
-    public static DutyCycleEncoder intakeEncoder = new DutyCycleEncoder(5);
+    public static DutyCycleEncoder intakeEncoder = new DutyCycleEncoder(9);
     
     //public static DutyCycleEncoder intakEncoder = new DutyCycleEncoder(0)
    // private final  JoystickButton orangeButton = new JoystickButton(THRUSTMASTER, pistonTimer);
@@ -105,7 +106,10 @@ public class RobotContainer {
         {
             sameNote = true;
             Intake.intakeWheels.set(0);
-            (new Wait(Constants.DELAY_AFTER_STOPPING_INTAKE_AND_LIFTING)).andThen(intakeLiftCommand).schedule();
+            (new Wait(Constants.DELAY_AFTER_STOPPING_INTAKE_AND_LIFTING))
+            .andThen(intakeLiftCommand)
+            .andThen(new Wait(0.1))
+            .andThen(new IntakePulse()).schedule();
             System.out.println("NOTE JUST PRESSED LIMIT!\nlift command scheduling");
         }
     }
@@ -114,6 +118,8 @@ public class RobotContainer {
     {
 
         SmartDashboard.putNumber("encoder position", RobotContainer.intakeEncoder.getAbsolutePosition());
+        SmartDashboard.putNumber("Intake position angle", Robot.intakePos );
+        
         SmartDashboard.putNumber("Intake lift position", Intake.intakeLiftMotor.getPosition().getValue());
         SmartDashboard.putBoolean("Limit switch pressed: ", !pressedIntakeNoteLimitSwitch);
 

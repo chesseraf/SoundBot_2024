@@ -9,9 +9,13 @@ import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AutoBackwards;
 import frc.robot.commands.AutoForward;
+import frc.robot.commands.AutoObtainSecondNote;
+import frc.robot.commands.AutoShootFirstNote;
+import frc.robot.commands.DriveForTime;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
@@ -45,6 +49,8 @@ public class Robot extends TimedRobot {
   private String shootOnceObtainSecond = "obtain second, dont shoot it";
   private String shootOnce = "shoot one time";
   private String dontShoot = "zero shots";
+
+  private Command retreatCommand, shootingSequenceCommand;
 
 
   
@@ -103,12 +109,12 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     RobotContainer.SmartBoardUpdate();
     RobotContainer.activateButton();
-    intakePos = -RobotContainer.intakeEncoder.getAbsolutePosition();
+    intakePos = -RobotContainer.intakeEncoder.getAbsolutePosition() * 360;
     intakePos -= Constants.EncoderOffset;
 
     if(intakePos<0)
     {
-      intakePos += 1;
+      intakePos += 360;
     }
 
     Intake.intakeLiftMotor.setPosition(intakePos);
@@ -138,6 +144,43 @@ public class Robot extends TimedRobot {
     shootSequenceChosen = autoShootingSequence.getSelected();
     System.out.println("Auto selected: " + retreatChosen +"  and "+ shootSequenceChosen);
 
+    if(retreatChosen == rightRetreat)
+    {
+      retreatCommand = new DriveForTime(3, -0.2, -0.3);
+    }
+    else if (retreatChosen == backRetreat)
+    {
+      retreatCommand = new DriveForTime(3, -0.2, 0);
+    }
+    else if(retreatChosen == leftRetreat)
+    {
+      retreatCommand = new DriveForTime(3, -0.2, 0.3);
+
+    }
+    else
+    {
+      retreatCommand = new DriveForTime(0, 0, 0);
+    }
+
+    if(shootSequenceChosen == shootTwice)
+    {
+      shootingSequenceCommand = new AutoShootFirstNote().andThen(new AutoObtainSecondNote(true));
+    }
+    else if(shootSequenceChosen == shootOnce)
+    {
+      shootingSequenceCommand = new AutoShootFirstNote();
+    }
+    else if(shootSequenceChosen == shootOnceObtainSecond)
+    {
+      shootingSequenceCommand = new AutoShootFirstNote().andThen(new AutoObtainSecondNote(false));
+    }
+    else{
+      shootingSequenceCommand = new DriveForTime(0, 0,  0);
+    }
+
+    shootingSequenceCommand.andThen(retreatCommand).schedule();
+    
+//  private String dontRetreat = "No retreat", backRetreat = "retreat back", leftRetreat = "left retreat", rightRetreat = "right retreat";
 
 
     // if(autoChosen.equals(forwardAuto))
@@ -184,7 +227,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {  
-        Intake.intakeLiftMotor.set(0.1);//RobotContainer.THRUSTMASTER.getX()/10);
+        Intake.intakeLiftMotor.set(-0.05);//RobotContainer.THRUSTMASTER.getX()/10);
 
   }
 
