@@ -60,8 +60,8 @@ public final class Constants {
     MIN_POWER = 0.15,
     MIN_TURN = 0.1,
 
-    INTAKE_LOWER_SPEED = 0.1,
-    INTAKE_LIFT_SPEED = -0.1,
+    INTAKE_LOWER_SPEED = -0.1,
+    INTAKE_LIFT_SPEED = 0.1,
     INTAKE_WHEELS_INTAKE_SPEED = 0.25,
 
     INTAKE_REVERSE_SHOOT_SPEED = -0.25,

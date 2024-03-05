@@ -13,6 +13,8 @@ public class IntakePulse extends Command{
     int timeOutEachPulse = 30; //cycles 
     double inwardSpeedEachPulse = 0.1;
     double outSpeedEachPulse = -0.1;
+    boolean inward = true;
+    int lastRec = 0;
 
     boolean goingIn;
 
@@ -22,18 +24,47 @@ public class IntakePulse extends Command{
     timer = 0;
     goingIn = true;
   }
-
+// int timeFin = 0, timeStart = 0;
+//   boolean limitPressed;
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     timer++;
-    if(timer % (timeIntoEachPulse + timeOutEachPulse) < timeIntoEachPulse)
+   // limitPressed = !RobotContainer.intakeLimitSwitch.get();
+    // if(timer % (timeIntoEachPulse + timeOutEachPulse) < timeIntoEachPulse)
+    // {
+    //     Intake.intakeLiftMotor.set(inwardSpeedEachPulse);
+    // }
+    // else{
+    //     Intake.intakeLiftMotor.set(outSpeedEachPulse);
+    // }
+
+    if(inward && !RobotContainer.intakeLimitSwitch.get())
+    {
+        Intake.intakeLiftMotor.set(outSpeedEachPulse);
+        lastRec = timer;
+    }
+    else if(!inward && timer-lastRec > timeOutEachPulse)
     {
         Intake.intakeLiftMotor.set(inwardSpeedEachPulse);
     }
-    else{
-        Intake.intakeLiftMotor.set(outSpeedEachPulse);
-    }
+
+
+    // if(inward && limitPressed)
+    // {
+    //     inward = false;
+    
+    //     timeStart = timer;
+    //     timeFin = timeStart + timeOutEachPulse;
+    // }
+    // if(!inward && timeFin > timer)
+    // {
+    //     inward = true;
+    // }
+    // if(inward)
+    //     Intake.intakeLiftMotor.set(inwardSpeedEachPulse);
+    // else
+    //     Intake.intakeLiftMotor.set(outSpeedEachPulse);
   }
 
   // Called once the command ends or is interrupted.
