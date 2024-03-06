@@ -26,9 +26,14 @@ public final class Constants {
     public static final double EncoderOffset = -72;
     //to avoid problems going from 1 to 0, change the absolute 0 location
 
-    public static final double SHOOTER_SPEED = 0.1;
-    public static final double SHOOTER_OUTER_SPEED = 0.2;
-    public static final double SHOOTER_INNER_SPEED = -0.1;
+    public static final double SHOOTER_SPEED = 0.1,
+    SHOOTER_OUTER_HIGH_SHOT_SPEED = 0.2,
+     SHOOTER_INNER_HIGH_SHOT_SPEED = -0.1,
+     SHOOTER_INNER_LOW_SHOT_SPEED = -0.1,
+     SHOOTER_OUTER_LOW_SHOT_SPEED = -0.1,
+     SHOOTER_INNER_SHUTTLE_SHOT_SPEED = -0.1,
+     SHOOTER_OUTER_SHUTTLE_SHOT_SPEED = -0.1;
+
     public static final double DELAY_AFTER_STOPPING_INTAKE_AND_LIFTING = 0.5,
     DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE = 1 * 50 //cycles
     ;
@@ -60,13 +65,13 @@ public final class Constants {
     MIN_POWER = 0.15,
     MIN_TURN = 0.1,
 
-    INTAKE_LOWER_SPEED = -0.1,
-    INTAKE_LIFT_SPEED = 0.1,
-    INTAKE_WHEELS_INTAKE_SPEED = 0.25,
+    INTAKE_LOWER_SPEED = -0.15,
+    INTAKE_LIFT_SPEED = .15,
+    INTAKE_WHEELS_INTAKE_SPEED = 0.3,
 
     INTAKE_REVERSE_SHOOT_SPEED = -0.25,
 
-    DEGREES_BEFORE_MAX_TO_END = 0.01;
+    DEGREES_BEFORE_MAX_TO_END = 2;
 
     
     //public static Button  bu= new But()

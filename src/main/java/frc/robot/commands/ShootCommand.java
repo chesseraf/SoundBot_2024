@@ -15,6 +15,22 @@ public class ShootCommand extends Command {
 
   // Called when the command is initially scheduled.
   int timer;
+
+  public static final int HIGH_SHOT = 0;
+  public static final int LOW_SHOT = 1;
+  public static final int SHUTTLE_SHOT = 2;
+  
+  private int shotType;
+  
+
+  public ShootCommand(int shotType)
+  {
+    this.shotType = shotType;
+  }
+  public ShootCommand()
+  {
+    this(HIGH_SHOT);
+  }
   
   public static boolean currentlyShooting;
   @Override
@@ -33,7 +49,19 @@ public class ShootCommand extends Command {
   public void execute() {
     if(Intake.intakeUp)
     {
-      Shooter.spinShooter();
+      if(shotType == HIGH_SHOT)
+      {
+        Shooter.spinShooterHighShot();
+      }
+      else if (shotType == LOW_SHOT)
+      {
+        Shooter.spinShooterLowShot();
+      }
+      else if(shotType == SHUTTLE_SHOT)
+      {                
+        Shooter.spinShooterShuttleShot();
+      }
+      
       timer++;
       if(timer > Constants.DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE)
       {

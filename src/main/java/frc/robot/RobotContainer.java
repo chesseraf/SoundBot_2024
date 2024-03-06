@@ -46,12 +46,12 @@ public class RobotContainer {
     public static IntakeLift intakeLiftCommand = new IntakeLift();
 
     public static boolean intakePostitionUsed = false;
-    public static DigitalInput intakeLimitSwitch = new DigitalInput(7);
+    public static DigitalInput intakeLimitSwitch = new DigitalInput(0);
     public static boolean pressedIntakeNoteLimitSwitch;
-    public static boolean prevpressedIntakeNoteLimitSwitch;
+    public static boolean prevpressedIntakeNoteLimitSwitch = false;
 
-    public static boolean intakeNoteLimitJustPressed;
-    public static boolean intakeNoteLimitJustUnpressed;
+    public static boolean intakeNoteLimitJustPressed = false;
+    public static boolean intakeNoteLimitJustUnpressed = false;
 
     public static boolean sameNote = false;
 
@@ -65,16 +65,17 @@ public class RobotContainer {
         DriveWithJoystick.XJoystick = THRUSTMASTER.getX();
         DriveWithJoystick.YJoystick = THRUSTMASTER.getY();
         prevpressedIntakeNoteLimitSwitch = pressedIntakeNoteLimitSwitch;
-        pressedIntakeNoteLimitSwitch = intakeLimitSwitch.get();
+        pressedIntakeNoteLimitSwitch = !intakeLimitSwitch.get();
+        //pressedIntakeNoteLimitSwitch = false;
 
         intakeNoteLimitJustPressed = pressedIntakeNoteLimitSwitch && !prevpressedIntakeNoteLimitSwitch;
         intakeNoteLimitJustUnpressed = !pressedIntakeNoteLimitSwitch && prevpressedIntakeNoteLimitSwitch;
 
 
-        for(int i = 0; i<16 ; i++)
+        for(int i = 1; i<16 ; i++)
         {
             prevButtons[i] = currentButtons[i];
-            currentButtons[i] = THRUSTMASTER.getRawButtonPressed(i+1);
+            currentButtons[i] = THRUSTMASTER.getRawButtonPressed(i);
             justPressedButtons[i] = currentButtons[i] && ! prevButtons[i];
             justReleasedButtons[i] = !currentButtons[i] && prevButtons[i];
         }
@@ -96,8 +97,9 @@ public class RobotContainer {
             }
             else
             {
-                intakeLiftCommand.schedule();
                 System.out.println("lift command scheduling");
+
+                intakeLiftCommand.schedule();
             }
         }
 
@@ -117,11 +119,9 @@ public class RobotContainer {
     public static void SmartBoardUpdate()
     {
 
-        SmartDashboard.putNumber("encoder position", RobotContainer.intakeEncoder.getAbsolutePosition());
-        SmartDashboard.putNumber("Intake position angle", Robot.intakePos );
-        
+        SmartDashboard.putNumber("Encoder position", RobotContainer.intakeEncoder.getAbsolutePosition());        
         SmartDashboard.putNumber("Intake lift position", Intake.intakeLiftMotor.getPosition().getValue());
-        SmartDashboard.putBoolean("Limit switch pressed: ", !pressedIntakeNoteLimitSwitch);
+        SmartDashboard.putBoolean("Limit switch pressed: ", pressedIntakeNoteLimitSwitch);
 
     }
 }

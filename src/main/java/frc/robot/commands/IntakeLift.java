@@ -23,7 +23,7 @@ public class IntakeLift extends Command{
     // Called every time the scheduler runs while the command is scheduled.
     @Override
     public void execute() {
-        System.out.print("lifting");
+        //System.out.print("lifting");
         // Intake.intakeLiftMotor.set(Constants.INTAKE_LIFT_SPEED);
         // Intake.intakeWheels.set(0);
         timer++;
@@ -45,11 +45,11 @@ public class IntakeLift extends Command{
     // Returns true when the command should end.
     @Override
     public boolean isFinished() {        
-        if(Robot.intakePos < Constants.INTAKE_MAX_ANGLE_UP + Constants.DEGREES_BEFORE_MAX_TO_END)
+        if(Robot.intakePos > Constants.INTAKE_MAX_ANGLE_UP - Constants.DEGREES_BEFORE_MAX_TO_END)
         {
-            System.out.println("END A");
-            System.out.println("true: "+Intake.intakeLiftMotor.getPosition().getValue()+" < "+(Constants.INTAKE_MAX_ANGLE_UP + Constants.DEGREES_BEFORE_MAX_TO_END));
-            System.out.println("Encoder: "+ RobotContainer.intakeEncoder.getAbsolutePosition());
+            // System.out.println("END A");
+            // System.out.println("true: "+Intake.intakeLiftMotor.getPosition().getValue()+" < "+(Constants.INTAKE_MAX_ANGLE_UP + Constants.DEGREES_BEFORE_MAX_TO_END));
+            // System.out.println("Encoder: "+ RobotContainer.intakeEncoder.getAbsolutePosition());
 
             return true;
         }

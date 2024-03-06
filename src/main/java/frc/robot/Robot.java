@@ -11,8 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.commands.AutoBackwards;
-import frc.robot.commands.AutoForward;
+
 import frc.robot.commands.AutoObtainSecondNote;
 import frc.robot.commands.AutoShootFirstNote;
 import frc.robot.commands.DriveForTime;
@@ -35,8 +34,7 @@ public class Robot extends TimedRobot {
   //private DriveTrain train=new DriveTrain();
 
   private DriveWithJoystick driveCommand =  new DriveWithJoystick();
-  private AutoForward autoForwardCommand =  new AutoForward();
-  private AutoBackwards autoBackCommand = new AutoBackwards();
+  
   private String retreatChosen, shootSequenceChosen;
 
 
@@ -69,10 +67,15 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-   // CameraServer.startAutomaticCapture();
+    CameraServer.startAutomaticCapture();
     RobotContainer.intakeEncoder.setDistancePerRotation(48);
 
-    DriveTrain.applyConfig();
+    for(int i=0; i<16; i++)
+    {
+      RobotContainer.prevButtons[i] = false;
+    }
+
+    //DriveTrain.applyConfig();
 
     //RobotContainer.intakeEncoder.setDistancePerPulse(1.0/256.0);
 
@@ -227,8 +230,11 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {  
-        Intake.intakeLiftMotor.set(-0.05);//RobotContainer.THRUSTMASTER.getX()/10);
-
+        for(int i=0; i<20; i++)
+    {
+      if(RobotContainer.THRUSTMASTER.getRawButton(i))
+        System.out.println(i+" pressed!");
+    }
   }
 
   /** This function is called once when the robot is first started up. */
@@ -237,5 +243,11 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically whilst in simulation. */
   @Override
-  public void simulationPeriodic() {}
+  public void simulationPeriodic() {
+    for(int i=0; i<20; i++)
+    {
+      if(RobotContainer.THRUSTMASTER.getRawButton(i))
+        System.out.println(i+" pressed!");
+    }
+  }
 }
