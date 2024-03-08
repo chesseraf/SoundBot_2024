@@ -17,6 +17,7 @@ import frc.robot.commands.ShootCommand;
 import frc.robot.commands.Wait;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Shooter;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -41,7 +42,9 @@ public class RobotContainer {
     public static boolean[] justPressedButtons = new boolean[16];
     public static boolean[] justReleasedButtons = new boolean[16];
 
-    public static ShootCommand shootingCommand =  new ShootCommand();
+    public static ShootCommand highShotCommand = new ShootCommand(ShootCommand.HIGH_SHOT) , 
+    lowShotCommand = new ShootCommand(ShootCommand.LOW_SHOT) ,
+    shuttleShotCommand = new ShootCommand(ShootCommand.SHUTTLE_SHOT);
     public static IntakeLower intakeLowerCommand = new IntakeLower();
     public static IntakeLift intakeLiftCommand = new IntakeLift();
 
@@ -85,10 +88,20 @@ public class RobotContainer {
     {
         //System.out.println("command scheduling");
 
-        if(justPressedButtons[Constants.SHOOT_BUTTON] && !ShootCommand.currentlyShooting)
+        if(justPressedButtons[Constants.SHOOT_HIGH_BUTTON] && !ShootCommand.currentlyShooting)
         {
-            shootingCommand.schedule();
+            highShotCommand.schedule();
         }
+        else if(justPressedButtons[Constants.SHOOT_LOW_BUTTON] && !ShootCommand.currentlyShooting)
+        {
+            lowShotCommand.schedule();
+        }
+        else if(justPressedButtons[Constants.SHOOT_SHUTTLE_BUTTON] && !ShootCommand.currentlyShooting)
+        {
+            shuttleShotCommand.schedule();
+        }
+
+
         if(justPressedButtons[Constants.FLIP_INTAKE_BUTTON] && !intakePostitionUsed){
             if(Intake.intakeUp)
             {                

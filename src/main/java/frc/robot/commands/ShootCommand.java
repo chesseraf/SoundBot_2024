@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -21,6 +22,7 @@ public class ShootCommand extends Command {
   public static final int SHUTTLE_SHOT = 2;
   
   private int shotType;
+  private boolean customShotInstead;
   
 
   public ShootCommand(int shotType)
@@ -41,6 +43,16 @@ public class ShootCommand extends Command {
       currentlyShooting = true;
       System.out.println("Initialized shoot command");
     }
+    if(Robot.useAlternativeShootingSpeeds.getSelected())
+    {
+      Shooter.innerCustomShooterSpeed = 0.1*Robot.alternativeInnerShootingSpeedTenths.getSelected() + 0.01 * Robot.alternativeInnerShootingSpeedHundreths.getSelected();
+      Shooter.outerCustomShooterSpeed = 0.1*Robot.alternativeOuterShootingSpeedTenths.getSelected() + 0.01 * Robot.alternativeOuterShootingSpeedHundreths.getSelected();
+      customShotInstead = true;
+    }
+    else
+    {
+      customShotInstead =false;
+    }
     
   }
 
@@ -49,18 +61,26 @@ public class ShootCommand extends Command {
   public void execute() {
     if(Intake.intakeUp)
     {
-      if(shotType == HIGH_SHOT)
+      if(customShotInstead)
       {
-        Shooter.spinShooterHighShot();
+        Shooter.spinCustomSpeed();
       }
-      else if (shotType == LOW_SHOT)
+      else
       {
-        Shooter.spinShooterLowShot();
+        if(shotType == HIGH_SHOT)
+        {
+          Shooter.spinShooterHighShot();
+        }
+        else if (shotType == LOW_SHOT)
+        {
+          Shooter.spinShooterLowShot();
+        }
+        else if(shotType == SHUTTLE_SHOT)
+        {                
+          Shooter.spinShooterShuttleShot();
+        }
       }
-      else if(shotType == SHUTTLE_SHOT)
-      {                
-        Shooter.spinShooterShuttleShot();
-      }
+        
       
       timer++;
       if(timer > Constants.DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE)
@@ -96,4 +116,5 @@ public class ShootCommand extends Command {
   {
     return(Constants.SHOOTER_SPEED);
   }
+
 }

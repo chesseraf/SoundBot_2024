@@ -40,6 +40,14 @@ public class Robot extends TimedRobot {
 
   private final SendableChooser<String> autoRetreatChoice = new SendableChooser<>();
   private final SendableChooser<String> autoShootingSequence = new SendableChooser<>();
+
+public static final SendableChooser<Boolean> useAlternativeShootingSpeeds = new SendableChooser<>();
+public static final SendableChooser<Integer> alternativeOuterShootingSpeedTenths = new SendableChooser<>();
+public static final SendableChooser<Integer> alternativeOuterShootingSpeedHundreths = new SendableChooser<>();
+
+public static final SendableChooser<Integer> alternativeInnerShootingSpeedTenths = new SendableChooser<>();
+public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundreths = new SendableChooser<>();
+
   
   private String dontRetreat = "No retreat", backRetreat = "retreat back", leftRetreat = "left retreat", rightRetreat = "right retreat";
 
@@ -67,8 +75,8 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    CameraServer.startAutomaticCapture();
-    RobotContainer.intakeEncoder.setDistancePerRotation(48);
+    //CameraServer.startAutomaticCapture();
+    //RobotContainer.intakeEncoder.setDistancePerRotation(48);
 
     for(int i=0; i<16; i++)
     {
@@ -90,7 +98,28 @@ public class Robot extends TimedRobot {
     autoRetreatChoice.addOption(leftRetreat, leftRetreat);
     autoRetreatChoice.addOption(rightRetreat, rightRetreat);
 
+    useAlternativeShootingSpeeds.setDefaultOption("False", false);
+    useAlternativeShootingSpeeds.addOption("True", true);
+
+    alternativeInnerShootingSpeedHundreths.setDefaultOption("0 (0.01 inner)", 0);
+    alternativeInnerShootingSpeedTenths.setDefaultOption("0 (0.1 inner)", 0);
+    alternativeOuterShootingSpeedHundreths.setDefaultOption("0 (0.01 outer)", 0);
+    alternativeOuterShootingSpeedTenths.setDefaultOption("0 (0.1 outer)", 0);
+    for(int i=1; i<=9; i++)
+    {
+      alternativeInnerShootingSpeedHundreths.addOption(((Integer)i).toString(), i);
+      alternativeInnerShootingSpeedTenths.addOption(((Integer)i).toString(), i);
+      alternativeOuterShootingSpeedHundreths.addOption(((Integer)i).toString(), i);
+      alternativeOuterShootingSpeedTenths.addOption(((Integer)i).toString(), i);
+    }
+
+    SmartDashboard.putData(alternativeInnerShootingSpeedHundreths);
+    SmartDashboard.putData(alternativeOuterShootingSpeedHundreths);
+    SmartDashboard.putData(alternativeInnerShootingSpeedTenths);
+    SmartDashboard.putData(alternativeOuterShootingSpeedTenths);
+    SmartDashboard.putData(useAlternativeShootingSpeeds);
     
+
     SmartDashboard.putData("Retreat choices", autoRetreatChoice);
     SmartDashboard.putData("Shooting sequence", autoShootingSequence);
 
@@ -121,6 +150,13 @@ public class Robot extends TimedRobot {
     }
 
     Intake.intakeLiftMotor.setPosition(intakePos);
+
+    // if(useAlternativeShootingSpeeds.getSelected())
+    // {
+    //   Shooter.innerCustomShooterSpeed = 0.1*alternativeInnerShootingSpeedTenths.getSelected() + 0.01 * alternativeInnerShootingSpeedHundreths.getSelected();
+    //   Shooter.outerCustomShooterSpeed = 0.1*alternativeOuterShootingSpeedTenths.getSelected() + 0.01 * alternativeOuterShootingSpeedHundreths.getSelected();
+       
+    // }
 
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,

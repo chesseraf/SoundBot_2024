@@ -27,12 +27,12 @@ public final class Constants {
     //to avoid problems going from 1 to 0, change the absolute 0 location
 
     public static final double SHOOTER_SPEED = 0.1,
-    SHOOTER_OUTER_HIGH_SHOT_SPEED = 0.2,
-     SHOOTER_INNER_HIGH_SHOT_SPEED = -0.1,
-     SHOOTER_INNER_LOW_SHOT_SPEED = -0.1,
-     SHOOTER_OUTER_LOW_SHOT_SPEED = -0.1,
-     SHOOTER_INNER_SHUTTLE_SHOT_SPEED = -0.1,
-     SHOOTER_OUTER_SHUTTLE_SHOT_SPEED = -0.1;
+    SHOOTER_OUTER_HIGH_SHOT_SPEED = 0.47,
+     SHOOTER_INNER_HIGH_SHOT_SPEED = 0.47,
+     SHOOTER_INNER_LOW_SHOT_SPEED = 0.07,
+     SHOOTER_OUTER_LOW_SHOT_SPEED = 0.07,
+     SHOOTER_INNER_SHUTTLE_SHOT_SPEED = 0.07,
+     SHOOTER_OUTER_SHUTTLE_SHOT_SPEED = 0.07;
 
     public static final double DELAY_AFTER_STOPPING_INTAKE_AND_LIFTING = 0.5,
     DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE = 1 * 50 //cycles
@@ -42,8 +42,8 @@ public final class Constants {
     public static final double ATUO_DRIVE_BACK_SECONDS = 3;
     // port numbers on pdp, computer, pcm...
 
-    public static final int SHOOTER_TOP_WHEEL_ID = 13,
-    SHOOTER_LOWER_WHEEL_ID = 11;
+    public static final int SHOOTER_OUTER_WHEEL_ID = 11,
+    SHOOTER_INNER_WHEEL_ID = 13;
     
     public static final int 
     FRONT_LEFT_ID = 13,//13
@@ -80,10 +80,11 @@ public final class Constants {
     // buttons numbers
  
     public static final int 
-    SHOOT_BUTTON = 1,
+    SHOOT_HIGH_BUTTON = 1,
+    SHOOT_LOW_BUTTON = 3,
+    SHOOT_SHUTTLE_BUTTON = 4,
     FLIP_INTAKE_BUTTON = 2,
-    NUM3_BUTTON = 3,
-    NUM4_BUTTON = 4,
+
     STOP_PULSING_BUTTON = 5;
     
     //public static final int[] BUTTON_ARR = {SHOOT_BUTTON};
