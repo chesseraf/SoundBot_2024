@@ -5,7 +5,6 @@
 package frc.robot;
 
 
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -16,6 +15,7 @@ import frc.robot.commands.AutoObtainSecondNote;
 import frc.robot.commands.AutoShootFirstNote;
 import frc.robot.commands.DriveForTime;
 import frc.robot.commands.DriveWithJoystick;
+import frc.robot.commands.IntakeLower;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -57,9 +57,6 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
   private String dontShoot = "zero shots";
 
   private Command retreatCommand, shootingSequenceCommand;
-
-
-  
   
  // private final SendableChooser<Double> shooterSpeedControl = new SendableChooser<>();
 
@@ -83,7 +80,7 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
       RobotContainer.prevButtons[i] = false;
     }
 
-    //DriveTrain.applyConfig();
+    DriveTrain.applyConfig();
 
     //RobotContainer.intakeEncoder.setDistancePerPulse(1.0/256.0);
 
@@ -139,7 +136,7 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
     RobotContainer.UpdateJoystick();
 
     CommandScheduler.getInstance().run();
-    RobotContainer.SmartBoardUpdate();
+   
     RobotContainer.activateButton();
     intakePos = -RobotContainer.intakeEncoder.getAbsolutePosition() * 360;
     intakePos -= Constants.EncoderOffset;
@@ -151,6 +148,7 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
 
     Intake.intakeLiftMotor.setPosition(intakePos);
 
+    RobotContainer.SmartBoardUpdate();
     // if(useAlternativeShootingSpeeds.getSelected())
     // {
     //   Shooter.innerCustomShooterSpeed = 0.1*alternativeInnerShootingSpeedTenths.getSelected() + 0.01 * alternativeInnerShootingSpeedHundreths.getSelected();
@@ -185,15 +183,15 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
 
     if(retreatChosen == rightRetreat)
     {
-      retreatCommand = new DriveForTime(3, -0.2, -0.3);
+      retreatCommand = new DriveForTime(3, -0.3, -0.3);
     }
     else if (retreatChosen == backRetreat)
     {
-      retreatCommand = new DriveForTime(3, -0.2, 0);
+      retreatCommand = new DriveForTime(3, -0.3, 0);
     }
     else if(retreatChosen == leftRetreat)
     {
-      retreatCommand = new DriveForTime(3, -0.2, 0.3);
+      retreatCommand = new DriveForTime(3, -0.3, 0.3);
 
     }
     else
@@ -201,9 +199,10 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
       retreatCommand = new DriveForTime(0, 0, 0);
     }
 
+    System.out.println(shootSequenceChosen);
     if(shootSequenceChosen == shootTwice)
     {
-      shootingSequenceCommand = new AutoShootFirstNote().andThen(new AutoObtainSecondNote(true));
+      shootingSequenceCommand = new AutoShootFirstNote().andThen(new IntakeLower()).andThen(new AutoObtainSecondNote(true));
     }
     else if(shootSequenceChosen == shootOnce)
     {
@@ -211,7 +210,7 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
     }
     else if(shootSequenceChosen == shootOnceObtainSecond)
     {
-      shootingSequenceCommand = new AutoShootFirstNote().andThen(new AutoObtainSecondNote(false));
+      shootingSequenceCommand = new AutoShootFirstNote().andThen(new IntakeLower()).andThen(new AutoObtainSecondNote(false));
     }
     else{
       shootingSequenceCommand = new DriveForTime(0, 0,  0);
@@ -268,7 +267,7 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
   public void testPeriodic() {  
         for(int i=0; i<20; i++)
     {
-      if(RobotContainer.THRUSTMASTER.getRawButton(i))
+      if(RobotContainer.ps4.getRawButton(i))
         System.out.println(i+" pressed!");
     }
   }
@@ -282,7 +281,7 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
   public void simulationPeriodic() {
     for(int i=0; i<20; i++)
     {
-      if(RobotContainer.THRUSTMASTER.getRawButton(i))
+      if(RobotContainer.ps4.getRawButton(i))
         System.out.println(i+" pressed!");
     }
   }

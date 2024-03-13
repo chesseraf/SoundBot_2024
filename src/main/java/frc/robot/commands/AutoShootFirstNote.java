@@ -4,7 +4,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public class AutoShootFirstNote extends Command{
 
-     private Command doEverything = (new DriveForTime(2, -0.1, 0)).andThen
+     private Command doEverything = (new DriveForTime(0, -0.1, 0)).andThen
     (new ShootCommand());
   @Override
   public void initialize() {

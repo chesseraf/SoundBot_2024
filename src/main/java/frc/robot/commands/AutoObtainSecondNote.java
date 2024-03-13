@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
-import frc.robot.subsystems.Intake;
 
 
 public class AutoObtainSecondNote extends Command{
@@ -40,8 +39,14 @@ public class AutoObtainSecondNote extends Command{
     if(comeBack)
     {
         (new Wait(0.5))
-        .andThen(new DriveForTime(timer/50.0 ,-Constants.AUTO_OBTAIN_SECOND_NOTE_SPEED, 0.0))
+        .andThen(new IntakeLift())
+        .andThen(new DriveForTime(timer/50.0 *0.8,-Constants.AUTO_OBTAIN_SECOND_NOTE_SPEED, 0.0))
         .andThen(new ShootCommand()).schedule();
+    }
+    else
+    {
+      (new Wait(0.5))
+        .andThen(new IntakeLift()).schedule();
     }
     
 
@@ -50,13 +55,11 @@ public class AutoObtainSecondNote extends Command{
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(RobotContainer.intakeLimitSwitch.get() || timer > 50*Constants.ATUO_DRIVE_BACK_SECONDS)
+    if(RobotContainer.pressedIntakeNoteLimitSwitch)// || timer > 50*Constants.ATUO_DRIVE_BACK_SECONDS)
     {
         return true;
     }
     return false;
   }
 
-
-    
 }

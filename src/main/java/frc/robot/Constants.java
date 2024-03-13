@@ -8,15 +8,32 @@ package frc.robot;
 public final class Constants {
     public static double SPEED_MULTIPLIER = 1;
 
-    // PS4 Constants
-    // public static class PS4 {
-    //     public static final int X = 2, 
-    //     CIRCLE = 3, SQUARE = 1, TRIANGLE = 4, LB = 5, RB = 6, TOUCHPAD = 9, OPTIONS = 10, L3 = 11, R3 = 12,
-    //             LEFT_TRIGGER = 3, RIGHT_TRGGER = 4, LEFT_X = 0, LEFT_Y = 1, RIGHT_X = 2, RIGHT_Y = 5;
-    // }
+    //PS4 Constants
+    public static class PS4 {
+        public static final int X = 2, 
+        CIRCLE = 3, SQUARE = 1, TRIANGLE = 4, LB = 5, RB = 6, TOUCHPAD = 9, OPTIONS = 10, L3 = 11, R3 = 12,
+                LEFT_TRIGGER = 7, RIGHT_TRGGER = 8, LEFT_X = 0, LEFT_Y = 1, RIGHT_X = 2, RIGHT_Y = 5
+                ;
+    }
+    // buttons numbers
+ 
+    public static final int 
+    SHOOT_HIGH_BUTTON = PS4.RIGHT_TRGGER,
+    SHOOT_LOW_BUTTON = PS4.RB,
+    SHOOT_SHUTTLE_BUTTON = PS4.CIRCLE,
+    FLIP_INTAKE_BUTTON = PS4.LEFT_TRIGGER,
 
+    STOP_PULSING_BUTTON = PS4.SQUARE;
 
-    public static final double MAX_ACCELERATION = 0.04;
+    // public static final int 
+    // SHOOT_HIGH_BUTTON = 1,
+    // SHOOT_LOW_BUTTON = 3,
+    // SHOOT_SHUTTLE_BUTTON = 4,
+    // FLIP_INTAKE_BUTTON = 2,
+
+    // STOP_PULSING_BUTTON = 5;
+
+    public static final double MAX_ACCELERATION = 0.05;
     //public static final double turnDeadBand = 0.05;
     public static final double SPEED_DEAD_BAND = 0.05;
 
@@ -35,10 +52,11 @@ public final class Constants {
      SHOOTER_OUTER_SHUTTLE_SHOT_SPEED = 0.07;
 
     public static final double DELAY_AFTER_STOPPING_INTAKE_AND_LIFTING = 0.5,
-    DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE = 1 * 50 //cycles
+    DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE = 1.5 * 50, //cycles
+    DELAY_AFTER_SHOOTING_BEFORE_STOPP_SHOoTER = 1*50
     ;
 
-    public static final double AUTO_OBTAIN_SECOND_NOTE_SPEED = 0.3;
+    public static final double AUTO_OBTAIN_SECOND_NOTE_SPEED = 0.5;
     public static final double ATUO_DRIVE_BACK_SECONDS = 3;
     // port numbers on pdp, computer, pcm...
 
@@ -65,32 +83,12 @@ public final class Constants {
     MIN_POWER = 0.15,
     MIN_TURN = 0.1,
 
-    INTAKE_LOWER_SPEED = -0.15,
-    INTAKE_LIFT_SPEED = .15,
+    INTAKE_LOWER_SPEED = -0.25,
+    INTAKE_LIFT_SPEED = .25,
     INTAKE_WHEELS_INTAKE_SPEED = 0.3,
 
     INTAKE_REVERSE_SHOOT_SPEED = -0.25,
 
     DEGREES_BEFORE_MAX_TO_END = 2;
-
-    
-    //public static Button  bu= new But()
-    //public static final Trigger halfSpeed = new Trigger(null)
-
-    // buttons numbers
- 
-    public static final int 
-    SHOOT_HIGH_BUTTON = 1,
-    SHOOT_LOW_BUTTON = 3,
-    SHOOT_SHUTTLE_BUTTON = 4,
-    FLIP_INTAKE_BUTTON = 2,
-
-    STOP_PULSING_BUTTON = 5;
-    
-    //public static final int[] BUTTON_ARR = {SHOOT_BUTTON};
-    
-//     public static class OperatorConstants {
-//       public static final int kDriverControllerPort = 0;
-//   }
 }
 

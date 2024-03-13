@@ -8,6 +8,7 @@ package frc.robot;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.IntakeLift;
@@ -17,7 +18,6 @@ import frc.robot.commands.ShootCommand;
 import frc.robot.commands.Wait;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Shooter;
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -29,7 +29,9 @@ public class RobotContainer {
          
     }
 
-    public final static Joystick THRUSTMASTER = new Joystick(Constants.THRUSTMASTER_PORT);
+    //public final static Joystick THRUSTMASTER = new Joystick(Constants.THRUSTMASTER_PORT);
+    public final static PS4Controller ps4 = new PS4Controller(Constants.THRUSTMASTER_PORT);
+    
     
     
 
@@ -49,7 +51,7 @@ public class RobotContainer {
     public static IntakeLift intakeLiftCommand = new IntakeLift();
 
     public static boolean intakePostitionUsed = false;
-    public static DigitalInput intakeLimitSwitch = new DigitalInput(0);
+    public static DigitalInput intakeLimitSwitch = new DigitalInput(7);
     public static boolean pressedIntakeNoteLimitSwitch;
     public static boolean prevpressedIntakeNoteLimitSwitch = false;
 
@@ -65,8 +67,12 @@ public class RobotContainer {
   
 
     public static void UpdateJoystick(){
-        DriveWithJoystick.XJoystick = THRUSTMASTER.getX();
-        DriveWithJoystick.YJoystick = THRUSTMASTER.getY();
+        // DriveWithJoystick.XJoystick = THRUSTMASTER.getX();
+        // DriveWithJoystick.YJoystick = THRUSTMASTER.getY();
+
+        DriveWithJoystick.XJoystick = ps4.getRightY();
+        DriveWithJoystick.YJoystick = ps4.getLeftX();
+        
         prevpressedIntakeNoteLimitSwitch = pressedIntakeNoteLimitSwitch;
         pressedIntakeNoteLimitSwitch = !intakeLimitSwitch.get();
         //pressedIntakeNoteLimitSwitch = false;
@@ -75,10 +81,12 @@ public class RobotContainer {
         intakeNoteLimitJustUnpressed = !pressedIntakeNoteLimitSwitch && prevpressedIntakeNoteLimitSwitch;
 
 
-        for(int i = 1; i<16 ; i++)
+        for(int i = 1; i<13 ; i++)
         {
             prevButtons[i] = currentButtons[i];
-            currentButtons[i] = THRUSTMASTER.getRawButtonPressed(i);
+            //currentButtons[i] = THRUSTMASTER.getRawButtonPressed(i);
+            currentButtons[i] = ps4.getRawButton(i);
+            
             justPressedButtons[i] = currentButtons[i] && ! prevButtons[i];
             justReleasedButtons[i] = !currentButtons[i] && prevButtons[i];
         }
@@ -122,7 +130,7 @@ public class RobotContainer {
             sameNote = true;
             Intake.intakeWheels.set(0);
             (new Wait(Constants.DELAY_AFTER_STOPPING_INTAKE_AND_LIFTING))
-            .andThen(intakeLiftCommand)
+            .andThen( new IntakeLift())
             .andThen(new Wait(0.1))
             .andThen(new IntakePulse()).schedule();
             System.out.println("NOTE JUST PRESSED LIMIT!\nlift command scheduling");
@@ -135,6 +143,7 @@ public class RobotContainer {
         SmartDashboard.putNumber("Encoder position", RobotContainer.intakeEncoder.getAbsolutePosition());        
         SmartDashboard.putNumber("Intake lift position", Intake.intakeLiftMotor.getPosition().getValue());
         SmartDashboard.putBoolean("Limit switch pressed: ", pressedIntakeNoteLimitSwitch);
+        SmartDashboard.putBoolean("Same Note", sameNote);
 
     }
 }

@@ -20,6 +20,8 @@ public class DriveForTime extends Command {
 
     //50 cycles per second
     target = (int) (driveTime * 50);
+    target = 0;
+    counter = 0;
   }
 
   // Called when the command is initially scheduled.

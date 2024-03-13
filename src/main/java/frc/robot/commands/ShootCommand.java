@@ -7,7 +7,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
 
@@ -34,7 +33,7 @@ public class ShootCommand extends Command {
     this(HIGH_SHOT);
   }
   
-  public static boolean currentlyShooting;
+  public static boolean currentlyShooting = false;
   @Override
   public void initialize() {
     if(Intake.intakeUp)
@@ -103,7 +102,7 @@ public class ShootCommand extends Command {
   public boolean isFinished() {
     if(Intake.intakeUp)
     {
-      return(timer > Constants.DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE + 100);
+      return(timer > Constants.DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE + Constants.DELAY_AFTER_SHOOTING_BEFORE_STOPP_SHOoTER);
     }
     else
     {
