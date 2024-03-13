@@ -29,8 +29,8 @@ public class RobotContainer {
          
     }
 
-    //public final static Joystick THRUSTMASTER = new Joystick(Constants.THRUSTMASTER_PORT);
-    public final static PS4Controller ps4 = new PS4Controller(Constants.THRUSTMASTER_PORT);
+    public final static Joystick THRUSTMASTER = new Joystick(Constants.THRUSTMASTER_PORT);
+    //public final static PS4Controller ps4 = new PS4Controller(Constants.THRUSTMASTER_PORT);
     
     
     
@@ -61,17 +61,15 @@ public class RobotContainer {
     public static boolean sameNote = false;
 
     public static DutyCycleEncoder intakeEncoder = new DutyCycleEncoder(9);
-    
-    //public static DutyCycleEncoder intakEncoder = new DutyCycleEncoder(0)
-   // private final  JoystickButton orangeButton = new JoystickButton(THRUSTMASTER, pistonTimer);
-  
-
     public static void UpdateJoystick(){
-        // DriveWithJoystick.XJoystick = THRUSTMASTER.getX();
-        // DriveWithJoystick.YJoystick = THRUSTMASTER.getY();
+        DriveWithJoystick.XJoystick = THRUSTMASTER.getX();
+        DriveWithJoystick.YJoystick = THRUSTMASTER.getY();
 
-        DriveWithJoystick.XJoystick = ps4.getRightY();
-        DriveWithJoystick.YJoystick = ps4.getLeftX();
+        // DriveWithJoystick.XJoystick = (ps4.getLeftY() - ps4.getRightY())/2;
+        // DriveWithJoystick.YJoystick = (ps4.getLeftY() + ps4.getRightY())/2;
+
+        // DriveWithJoystick.leftJoy = ps4.getLeftY();
+        // DriveWithJoystick.rightJoy = ps4.getRightY();
         
         prevpressedIntakeNoteLimitSwitch = pressedIntakeNoteLimitSwitch;
         pressedIntakeNoteLimitSwitch = !intakeLimitSwitch.get();
@@ -81,11 +79,11 @@ public class RobotContainer {
         intakeNoteLimitJustUnpressed = !pressedIntakeNoteLimitSwitch && prevpressedIntakeNoteLimitSwitch;
 
 
-        for(int i = 1; i<13 ; i++)
+        for(int i = 1; i<16 ; i++)
         {
             prevButtons[i] = currentButtons[i];
-            //currentButtons[i] = THRUSTMASTER.getRawButtonPressed(i);
-            currentButtons[i] = ps4.getRawButton(i);
+            currentButtons[i] = THRUSTMASTER.getRawButtonPressed(i);
+            //currentButtons[i] = ps4.getRawButton(i);
             
             justPressedButtons[i] = currentButtons[i] && ! prevButtons[i];
             justReleasedButtons[i] = !currentButtons[i] && prevButtons[i];
@@ -139,12 +137,10 @@ public class RobotContainer {
 
     public static void SmartBoardUpdate()
     {
-
         SmartDashboard.putNumber("Encoder position", RobotContainer.intakeEncoder.getAbsolutePosition());        
         SmartDashboard.putNumber("Intake lift position", Intake.intakeLiftMotor.getPosition().getValue());
         SmartDashboard.putBoolean("Limit switch pressed: ", pressedIntakeNoteLimitSwitch);
         SmartDashboard.putBoolean("Same Note", sameNote);
-
     }
 }
 

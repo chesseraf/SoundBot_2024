@@ -13,9 +13,20 @@ public class DriveWithJoystick extends Command{
   public static double XJoystick;
   public static double YJoystick;
 
+  public static Double leftJoy;
+  public static Double rightJoy;
+
+  private Double newLeft;
+  private Double newRight;
+  
+
   private double newSpeed;
   private double turnRate;
   private double prevSpeed = 0;
+
+  private double prevLeft = 0.0;
+  private double prevRight = 0.0;
+
   public DriveWithJoystick() {
     
   }
@@ -25,9 +36,26 @@ public class DriveWithJoystick extends Command{
 
   @Override
   public void execute() {
+
+    
   
     newSpeed =   -YJoystick;
     turnRate = XJoystick;
+
+    // newLeft = leftJoy;
+    // newRight = rightJoy;
+
+    // applyDeadBand(newLeft, Constants.SPEED_DEAD_BAND);
+    // applyDeadBand(newRight, Constants.SPEED_DEAD_BAND);
+
+    // affectMax(newLeft, prevLeft, Constants.MAX_ACCELERATION);
+    // affectMax(newRight, prevRight, Constants.MAX_ACCELERATION);
+
+    // DriveTrain.driveBothTank(newLeft, newRight);
+
+    // prevLeft = newLeft;
+    // prevRight = newRight;
+
 
       if (turnRate > 0) {
         turnRate = (turnRate * turnRate) * (1-Constants.MIN_TURN) + Constants.MIN_TURN;
@@ -60,5 +88,21 @@ public class DriveWithJoystick extends Command{
   @Override
   public boolean isFinished() {
           return false;
-      }
+  }
+  
+  public void affectMax(Double next, double prev, double maxChange)
+  {
+    if(next - prev > maxChange)
+      next = prev + maxChange;
+    
+    if(prev - next > maxChange)
+      next = prev - maxChange;
+  }
+  public void applyDeadBand(Double cur, double deadBand)
+  {
+    if(Math.abs(cur)<deadBand)
+    {
+      cur = 0.0;
+    }
+  }
 }

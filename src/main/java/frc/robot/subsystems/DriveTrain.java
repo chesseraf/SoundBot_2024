@@ -24,6 +24,7 @@ public class DriveTrain extends SubsystemBase{
     public static final TalonFX backLeftMotor = new TalonFX(Constants.BACK_LEFT_ID);
     public static final TalonFX backRightMotor = new TalonFX(Constants.BACK_RIGHT_ID);
     
+    
 
     public static final OpenLoopRampsConfigs configSpeed = new OpenLoopRampsConfigs().withDutyCycleOpenLoopRampPeriod(0.5);
 
@@ -38,6 +39,11 @@ public class DriveTrain extends SubsystemBase{
   {
     backDrive.arcadeDrive(forwardPercent, -rotationPercent);
     frontDrive.arcadeDrive(forwardPercent, -rotationPercent);
+  }
+  public static void driveBothTank(double left, double right)
+  {
+    backDrive.tankDrive(left, right);
+    frontDrive.tankDrive(left, right);
   }
 
   public static void turnDrive(double forwardPercent, double rotationPercent) {

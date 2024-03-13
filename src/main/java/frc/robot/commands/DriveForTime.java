@@ -4,11 +4,12 @@
 
 package frc.robot.commands;
 import frc.robot.subsystems.DriveTrain;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class DriveForTime extends Command {
-  private final double speed;
-  private final double turning;
+  private double speed;
+  private double turning;
 
   private int counter = 0;
   private int target = 0;
@@ -34,12 +35,18 @@ public class DriveForTime extends Command {
   @Override
   public void execute() {
     DriveTrain.driveBoth(speed, turning);
+    SmartDashboard.putString("Seconds left of drive for time ", ((Double)((target - counter)/50.0)).toString());
+    SmartDashboard.putString("Speed, turning: ", (speed +", " + turning));
+    
     counter++;
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    SmartDashboard.putString("Seconds left of drive for time ", "OFF");
+    SmartDashboard.putString("Speed, turning: ", "OFF");
+
     DriveTrain.driveBoth(0, 0);
   }
 
