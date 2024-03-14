@@ -169,6 +169,7 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
   @Override
   public void disabledPeriodic() {}
 
+  public static int commandsUntilRetreat;
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
@@ -179,15 +180,15 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
 
     if(retreatChosen == rightRetreat)
     {
-      retreatCommand = new DriveForTime(3, -0.3, -0.3);
+      retreatCommand = new DriveForTime(3, 0.3, -0.3);
     }
     else if (retreatChosen == backRetreat)
     {
-      retreatCommand = new DriveForTime(3, -0.3, 0);
+      retreatCommand = new DriveForTime(3, 0.3, 0);
     }
     else if(retreatChosen == leftRetreat)
     {
-      retreatCommand = new DriveForTime(3, -0.3, 0.3);
+      retreatCommand = new DriveForTime(3, 0.3, 0.3);
 
     }
     else
@@ -202,13 +203,16 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
     }
     else if(shootSequenceChosen == shootOnce)
     {
+      commandsUntilRetreat = 1;
       shootingSequenceCommand = new AutoShootFirstNote();
     }
     else if(shootSequenceChosen == shootOnceObtainSecond)
     {
+      commandsUntilRetreat = 2;
       shootingSequenceCommand = new AutoShootFirstNote().andThen(new IntakeLower()).andThen(new AutoObtainSecondNote(false));
     }
     else{
+      commandsUntilRetreat = 0;
       shootingSequenceCommand = new DriveForTime(0, 0,  0);
     }
 

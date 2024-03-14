@@ -40,7 +40,7 @@ public class AutoObtainSecondNote extends Command{
     {
         (new Wait(0.5))
         .andThen(new IntakeLift())
-        .andThen(new DriveForTime(timer/50.0 *0.8,-Constants.AUTO_OBTAIN_SECOND_NOTE_SPEED, 0.0))
+        .andThen(new DriveForTime(timer/50.0 *1.1,-Constants.AUTO_OBTAIN_SECOND_NOTE_SPEED, 0.0))
         .andThen(new ShootCommand()).schedule();
     }
     else

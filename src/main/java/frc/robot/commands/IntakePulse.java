@@ -15,7 +15,7 @@ public class IntakePulse extends Command{
     double outSpeedEachPulse = -0.07;
     boolean inward = true;
     int lastRec = 0;
-    int TOTAL_PULSES = 3;
+    int TOTAL_PULSES = 2;
 
     //boolean goingIn;
     int timeFin = 0, timeStartGoingOutMax = 0;
