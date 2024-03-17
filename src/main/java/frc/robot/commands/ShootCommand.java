@@ -18,7 +18,7 @@ public class ShootCommand extends Command {
 
   public static final int HIGH_SHOT = 0;
   public static final int LOW_SHOT = 1;
-  public static final int SHUTTLE_SHOT = 2;
+  public static final int SHUTTLE_SHOT = 2, SAFTEY_SHOT = 3;
   
   private int shotType;
   private boolean customShotInstead;
@@ -77,6 +77,10 @@ public class ShootCommand extends Command {
         else if(shotType == SHUTTLE_SHOT)
         {                
           Shooter.spinShooterShuttleShot();
+        }
+        else if(shotType == SAFTEY_SHOT)
+        {
+          Shooter.spinShooterSafteyShot();
         }
       }
         

@@ -44,6 +44,10 @@ public class Shooter extends Command{
     {
         setShooterMotors(Constants.SHOOTER_OUTER_SHUTTLE_SHOT_SPEED, Constants.SHOOTER_INNER_SHUTTLE_SHOT_SPEED);
     }
+    public static void spinShooterSafteyShot()
+    {
+        setShooterMotors(Constants.SHOOTER_OUTER_SAFTEY_SHOT_SPEED, Constants.SHOOTER_INNER_SAFETY_SHOT_SPEED);
+    }
 
     public static void spinCustomSpeed()
     {

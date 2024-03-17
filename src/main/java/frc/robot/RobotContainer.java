@@ -15,6 +15,7 @@ import frc.robot.commands.IntakeLift;
 import frc.robot.commands.IntakeLower;
 import frc.robot.commands.IntakePulse;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.ShootIntakeLow;
 import frc.robot.commands.Wait;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
@@ -29,8 +30,8 @@ public class RobotContainer {
          
     }
 
-    public final static Joystick THRUSTMASTER = new Joystick(Constants.THRUSTMASTER_PORT);
-    //public final static PS4Controller ps4 = new PS4Controller(Constants.THRUSTMASTER_PORT);
+    //public final static Joystick THRUSTMASTER = new Joystick(Constants.THRUSTMASTER_PORT);
+    public final static PS4Controller ps4 = new PS4Controller(Constants.THRUSTMASTER_PORT);
     
     
     
@@ -46,7 +47,9 @@ public class RobotContainer {
 
     public static ShootCommand highShotCommand = new ShootCommand(ShootCommand.HIGH_SHOT) , 
     lowShotCommand = new ShootCommand(ShootCommand.LOW_SHOT) ,
-    shuttleShotCommand = new ShootCommand(ShootCommand.SHUTTLE_SHOT);
+    shuttleShotCommand = new ShootCommand(ShootCommand.SHUTTLE_SHOT),
+    safteyShotCommand = new ShootCommand(ShootCommand.SAFTEY_SHOT);
+    
     public static IntakeLower intakeLowerCommand = new IntakeLower();
     public static IntakeLift intakeLiftCommand = new IntakeLift();
 
@@ -62,11 +65,11 @@ public class RobotContainer {
 
     public static DutyCycleEncoder intakeEncoder = new DutyCycleEncoder(9);
     public static void UpdateJoystick(){
-        DriveWithJoystick.XJoystick = THRUSTMASTER.getX();
-        DriveWithJoystick.YJoystick = THRUSTMASTER.getY();
+        // DriveWithJoystick.XJoystick = THRUSTMASTER.getX();
+        // DriveWithJoystick.YJoystick = THRUSTMASTER.getY();
 
-        // DriveWithJoystick.XJoystick = (ps4.getLeftY() - ps4.getRightY())/2;
-        // DriveWithJoystick.YJoystick = (ps4.getLeftY() + ps4.getRightY())/2;
+        DriveWithJoystick.XJoystick = ps4.getRightX();
+        DriveWithJoystick.YJoystick = ps4.getLeftY();
 
         // DriveWithJoystick.leftJoy = ps4.getLeftY();
         // DriveWithJoystick.rightJoy = ps4.getRightY();
@@ -82,7 +85,7 @@ public class RobotContainer {
         for(int i = 1; i<16 ; i++)
         {
             prevButtons[i] = currentButtons[i];
-            currentButtons[i] = THRUSTMASTER.getRawButtonPressed(i);
+            currentButtons[i] = ps4.getRawButtonPressed(i);
             //currentButtons[i] = ps4.getRawButton(i);
             
             justPressedButtons[i] = currentButtons[i] && ! prevButtons[i];
@@ -94,18 +97,30 @@ public class RobotContainer {
     {
         //System.out.println("command scheduling");
 
-        if(justPressedButtons[Constants.SHOOT_HIGH_BUTTON] && !ShootCommand.currentlyShooting)
+        if(!ShootCommand.currentlyShooting  && !intakePostitionUsed)
         {
-            highShotCommand.schedule();
+            if(justPressedButtons[Constants.SHOOT_HIGH_BUTTON])
+            {
+                highShotCommand.schedule();
+            }
+            else if(justPressedButtons[Constants.SHOOT_LOW_BUTTON])
+            {
+                lowShotCommand.schedule();
+            }
+            else if(justPressedButtons[Constants.SHOOT_SHUTTLE_BUTTON])
+            {
+                shuttleShotCommand.schedule();
+            } 
+            else if(justPressedButtons[Constants.SHOOT_WITH_INTAKE_BUTTON])
+            {
+                (new ShootIntakeLow()).schedule();
+            } 
+            else if(justPressedButtons[Constants.SHOOT_FROM_SAFTEY_BUTTON])
+            {
+                safteyShotCommand.schedule();
+            }
         }
-        else if(justPressedButtons[Constants.SHOOT_LOW_BUTTON] && !ShootCommand.currentlyShooting)
-        {
-            lowShotCommand.schedule();
-        }
-        else if(justPressedButtons[Constants.SHOOT_SHUTTLE_BUTTON] && !ShootCommand.currentlyShooting)
-        {
-            shuttleShotCommand.schedule();
-        }
+        
 
 
         if(justPressedButtons[Constants.FLIP_INTAKE_BUTTON] && !intakePostitionUsed){

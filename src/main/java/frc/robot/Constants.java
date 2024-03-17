@@ -17,21 +17,25 @@ public final class Constants {
     }
     // buttons numbers
  
-    // public static final int 
-    // SHOOT_HIGH_BUTTON = PS4.RIGHT_TRGGER,
-    // SHOOT_LOW_BUTTON = PS4.RB,
-    // SHOOT_SHUTTLE_BUTTON = PS4.CIRCLE,
-    // FLIP_INTAKE_BUTTON = PS4.LEFT_TRIGGER,
-
-    // STOP_PULSING_BUTTON = PS4.SQUARE;
-
     public static final int 
-    SHOOT_HIGH_BUTTON = 1,
-    SHOOT_LOW_BUTTON = 3,
-    SHOOT_SHUTTLE_BUTTON = 4,
-    FLIP_INTAKE_BUTTON = 2,
+    SHOOT_HIGH_BUTTON = PS4.RIGHT_TRGGER,
+    SHOOT_LOW_BUTTON = PS4.RB,
+    SHOOT_SHUTTLE_BUTTON = PS4.CIRCLE,
+    FLIP_INTAKE_BUTTON = PS4.LEFT_TRIGGER,
 
-    STOP_PULSING_BUTTON = 5;
+    STOP_PULSING_BUTTON = PS4.SQUARE,
+    SHOOT_WITH_INTAKE_BUTTON = PS4.TRIANGLE,
+    SHOOT_FROM_SAFTEY_BUTTON = PS4.X;
+
+    // public static final int 
+    // SHOOT_HIGH_BUTTON = 1,
+    // SHOOT_LOW_BUTTON = 3,
+    // SHOOT_SHUTTLE_BUTTON = 4,
+    // FLIP_INTAKE_BUTTON = 2,
+
+    // STOP_PULSING_BUTTON = 5,
+    // SHOOT_WITH_INTAKE_BUTTON = 6,
+    // SHOOT_FROM_SAFTEY_BUTTON = 7;
 
     public static final double MAX_ACCELERATION = 0.05;
     //public static final double turnDeadBand = 0.05;
@@ -49,7 +53,9 @@ public final class Constants {
      SHOOTER_INNER_LOW_SHOT_SPEED = 0.22,
      SHOOTER_OUTER_LOW_SHOT_SPEED = 0.22,
      SHOOTER_INNER_SHUTTLE_SHOT_SPEED = 0.98,
-     SHOOTER_OUTER_SHUTTLE_SHOT_SPEED = 0.6//spit out is 0.2
+     SHOOTER_OUTER_SHUTTLE_SHOT_SPEED = 0.6, //spit out is 0.2
+     SHOOTER_INNER_SAFETY_SHOT_SPEED = 0.5, //*************** */
+     SHOOTER_OUTER_SAFTEY_SHOT_SPEED = 0.5;
      ;
 
     public static final double DELAY_AFTER_STOPPING_INTAKE_AND_LIFTING = 0.5,

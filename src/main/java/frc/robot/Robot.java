@@ -72,7 +72,7 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
    */
   @Override
   public void robotInit() {
-    CameraServer.startAutomaticCapture();
+    //CameraServer.startAutomaticCapture();
 
     for(int i=0; i<16; i++)
     {
@@ -267,7 +267,7 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
   public void testPeriodic() {  
         for(int i=0; i<20; i++)
     {
-      if(RobotContainer.THRUSTMASTER.getRawButton(i))
+      if(RobotContainer.ps4.getRawButton(i))
         System.out.println(i+" pressed!");
     }
   }
@@ -281,7 +281,7 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
   public void simulationPeriodic() {
     for(int i=0; i<20; i++)
     {
-      if(RobotContainer.THRUSTMASTER.getRawButton(i))
+      if(RobotContainer.ps4.getRawButton(i))
         System.out.println(i+" pressed!");
     }
   }

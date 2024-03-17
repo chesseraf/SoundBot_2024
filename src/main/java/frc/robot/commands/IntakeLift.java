@@ -24,7 +24,7 @@ public class IntakeLift extends Command{
     @Override
     public void execute() {
         //System.out.print("lifting");
-        // Intake.intakeLiftMotor.set(Constants.INTAKE_LIFT_SPEED);
+        Intake.intakeLiftMotor.set(Constants.INTAKE_LIFT_SPEED);
         // Intake.intakeWheels.set(0);
         timer++;
     }
@@ -47,10 +47,6 @@ public class IntakeLift extends Command{
     public boolean isFinished() {        
         if(Robot.intakePos > Constants.INTAKE_MAX_ANGLE_UP - Constants.DEGREES_BEFORE_MAX_TO_END)
         {
-            // System.out.println("END A");
-            // System.out.println("true: "+Intake.intakeLiftMotor.getPosition().getValue()+" < "+(Constants.INTAKE_MAX_ANGLE_UP + Constants.DEGREES_BEFORE_MAX_TO_END));
-            // System.out.println("Encoder: "+ RobotContainer.intakeEncoder.getAbsolutePosition());
-
             return true;
         }
         if(timer>300)
