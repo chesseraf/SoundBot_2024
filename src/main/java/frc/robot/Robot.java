@@ -16,6 +16,7 @@ import frc.robot.commands.AutoShootFirstNote;
 import frc.robot.commands.DriveForTime;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.IntakeLower;
+import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
@@ -54,9 +55,19 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
   private String shootTwice = "shooting twice";
   private String shootOnceObtainSecond = "obtain second, dont shoot it";
   private String shootOnce = "shoot one time";
-  private String dontShoot = "zero shots";
+  private String dontShoot = "zero shots", shootTwiceObtainThird = "shooting twice, obtaining third",
+  shootThreeTimes = "shoot 3 times";
+
 
   private Command retreatCommand, shootingSequenceCommand;
+
+  public static final int START_NEAR_AMP = 0, START_MID = 1, START_FAR_FROM_AMP = 2, COL_RED = 0, COL_BLUE = 1, CLOSER_FIRST = 0, FURTHER_FIRST = 1;
+  public static final String neamAmp = "nearAmp", farFromAmp = "FAR FROM AMP", mid = "MID", red = "RED", blue = "BLUE";
+  public static int startLoc, teamCol, secondNote;
+  public SendableChooser<Integer> startLocChooser = new SendableChooser<Integer>();
+  public SendableChooser<Integer> colorChooser = new SendableChooser<Integer>();
+  public SendableChooser<Integer> secondNoteChooser = new SendableChooser<Integer>();
+  
   
  // private final SendableChooser<Double> shooterSpeedControl = new SendableChooser<>();
 
@@ -80,14 +91,23 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
     }
 
     DriveTrain.applyConfig();
+    startLocChooser.setDefaultOption(neamAmp, START_NEAR_AMP);
+    startLocChooser.addOption(farFromAmp, START_FAR_FROM_AMP);
+    startLocChooser.addOption(mid, START_MID);
 
-    //RobotContainer.intakeEncoder.setDistancePerPulse(1.0/256.0);
+    colorChooser.setDefaultOption(blue, COL_BLUE);
+    colorChooser.addOption(red, COL_RED);
 
+    secondNoteChooser.setDefaultOption("Closer note first", CLOSER_FIRST);
+    secondNoteChooser.addOption("Further not first", FURTHER_FIRST);
 
     autoShootingSequence.setDefaultOption(shootTwice, shootTwice);
     autoShootingSequence.addOption(shootOnceObtainSecond, shootOnceObtainSecond);
     autoShootingSequence.addOption(shootOnce, shootOnce);
     autoShootingSequence.addOption(dontShoot, dontShoot);
+    autoShootingSequence.addOption(shootTwiceObtainThird, dontShoot);
+    autoShootingSequence.addOption(shootThreeTimes, shootThreeTimes);
+    
 
     autoRetreatChoice.setDefaultOption(dontRetreat, dontRetreat);
     autoRetreatChoice.addOption(backRetreat, backRetreat);
@@ -114,6 +134,9 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
     SmartDashboard.putData(alternativeInnerShootingSpeedTenths);
     SmartDashboard.putData(alternativeOuterShootingSpeedTenths);
     SmartDashboard.putData(useAlternativeShootingSpeeds);
+    SmartDashboard.putData(colorChooser);
+    SmartDashboard.putData(startLocChooser);
+    SmartDashboard.putData(secondNoteChooser);
     
 
     SmartDashboard.putData("Retreat choices", autoRetreatChoice);
@@ -173,65 +196,74 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    retreatChosen = autoRetreatChoice.getSelected();
 
-    shootSequenceChosen = autoShootingSequence.getSelected();
-    System.out.println("Auto selected: " + retreatChosen +"  and "+ shootSequenceChosen);
 
-    if(retreatChosen == rightRetreat)
-    {
-      retreatCommand = new DriveForTime(3, 0.3, -0.3);
-    }
-    else if (retreatChosen == backRetreat)
-    {
-      retreatCommand = new DriveForTime(3, 0.3, 0);
-    }
-    else if(retreatChosen == leftRetreat)
-    {
-      retreatCommand = new DriveForTime(3, 0.3, 0.3);
+      
+      retreatChosen = autoRetreatChoice.getSelected();
+      startLoc = startLocChooser.getSelected();
+      teamCol = colorChooser.getSelected();
 
-    }
-    else
-    {
-      retreatCommand = new DriveForTime(0, 0, 0);
-    }
+      shootSequenceChosen = autoShootingSequence.getSelected();
+      System.out.println("Auto selected: " + retreatChosen +"  and "+ shootSequenceChosen);
 
-    System.out.println(shootSequenceChosen);
-    if(shootSequenceChosen == shootTwice)
-    {
-      shootingSequenceCommand = new AutoShootFirstNote().andThen(new IntakeLower()).andThen(new AutoObtainSecondNote(true));
-    }
-    else if(shootSequenceChosen == shootOnce)
-    {
-      commandsUntilRetreat = 1;
-      shootingSequenceCommand = new AutoShootFirstNote();
-    }
-    else if(shootSequenceChosen == shootOnceObtainSecond)
-    {
-      commandsUntilRetreat = 2;
-      shootingSequenceCommand = new AutoShootFirstNote().andThen(new IntakeLower()).andThen(new AutoObtainSecondNote(false));
-    }
-    else{
-      commandsUntilRetreat = 0;
-      shootingSequenceCommand = new DriveForTime(0, 0,  0);
-    }
+      if(retreatChosen == rightRetreat)
+      {
+        retreatCommand = new DriveForTime(3, 0.3, -0.3);
+      }
+      else if (retreatChosen == backRetreat)
+      {
+        retreatCommand = new DriveForTime(3, 0.3, 0);
+      }
+      else if(retreatChosen == leftRetreat)
+      {
+        retreatCommand = new DriveForTime(3, 0.3, 0.3);
 
-    shootingSequenceCommand.andThen(retreatCommand).schedule();
-    
+      }
+      else
+      {
+        retreatCommand = new DriveForTime(0, 0, 0);
+      }
+
+      System.out.println(shootSequenceChosen);
+      if(shootSequenceChosen == shootTwiceObtainThird)
+      {
+        shootingSequenceCommand = (new AutoShootFirstNote()).andThen(new IntakeLower()).andThen
+        (AutoObtainSecondNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote == CLOSER_FIRST))
+        .andThen(new ShootCommand()).andThen(AutoObtainSecondNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote == CLOSER_FIRST));
+      }
+      else if(shootSequenceChosen == shootThreeTimes)
+      {
+        shootingSequenceCommand = (new AutoShootFirstNote()).andThen(new IntakeLower()).andThen
+        (AutoObtainSecondNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote == CLOSER_FIRST))
+        .andThen(new ShootCommand()).andThen(AutoObtainSecondNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote == CLOSER_FIRST))
+        .andThen(new ShootCommand());
+      }
+      else if(shootSequenceChosen == shootTwice)
+      {
+        shootingSequenceCommand = (new AutoShootFirstNote()).andThen(new IntakeLower()).andThen
+        (AutoObtainSecondNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote == CLOSER_FIRST))
+        .andThen(new ShootCommand());
+      }
+      else if(shootSequenceChosen == shootOnce)
+      {
+        commandsUntilRetreat = 1;
+        shootingSequenceCommand = new AutoShootFirstNote();
+      }
+      else if(shootSequenceChosen == shootOnceObtainSecond)
+      {
+        commandsUntilRetreat = 2;
+        shootingSequenceCommand = new AutoShootFirstNote().andThen(new IntakeLower()).andThen(new AutoObtainSecondNote(false));
+      }
+      else
+      {
+        commandsUntilRetreat = 0;
+        shootingSequenceCommand = new DriveForTime(0, 0,  0);
+      }
+
+      shootingSequenceCommand.andThen(retreatCommand).schedule();
+  }
 //  private String dontRetreat = "No retreat", backRetreat = "retreat back", leftRetreat = "left retreat", rightRetreat = "right retreat";
 
-
-    // if(autoChosen.equals(forwardAuto))
-    // {
-
-    //   autoForwardCommand.schedule();
-    // }
-    // else if(autoChosen.equals(backwardAuto))
-    // {
-    //   autoBackCommand.schedule();
-    // }
-    
-  }
 
   /** This function is called periodically during autonomous. */
   @Override
@@ -239,18 +271,7 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
 
   @Override
   public void teleopInit() {
-
-    // This makes sure that the autonomous stops running when
-    // teleop starts running. If you want the autonomous to
-    // continue until interrupted by another command, remove
-    // this line or comment it out.
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.cancel();
-    // }
     driveCommand.schedule();
-    //Shooter.setShooterMotors(1);
-    // Shooter.shootMotorNumBack.set(0.6);
-    // Shooter.shootMotorNumFront.set(0.6);
   }
 
   /** This function is called periodically during operator control. */

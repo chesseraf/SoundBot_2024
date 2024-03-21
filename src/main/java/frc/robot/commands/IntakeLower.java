@@ -30,20 +30,28 @@ public class IntakeLower extends Command{
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
-        System.out.println("DONE lowering");
-        Intake.intakeWheels.set(Constants.INTAKE_WHEELS_INTAKE_SPEED);
-        RobotContainer.intakePostitionUsed = false;
-        Intake.intakeLiftMotor.set(0);
-        //Intake.intakeWheels.set(0);
-        Intake.intakeUp = false;
-        RobotContainer.sameNote = false;
+        if(!RobotContainer.emergencyLiftingIntake)
+        {
+            System.out.println("DONE lowering");
+            Intake.intakeWheels.set(Constants.INTAKE_WHEELS_INTAKE_SPEED);
+            RobotContainer.intakePostitionUsed = false;
+            Intake.intakeLiftMotor.set(0);
+            //Intake.intakeWheels.set(0);
+            Intake.intakeUp = false;
+            RobotContainer.sameNote = false;
+        }
+        
 
         //System.out.print("lowered Intake");
     }
   
     // Returns true when the command should end.
     @Override
-    public boolean isFinished() {        
+    public boolean isFinished() {  
+        if(RobotContainer.emergencyLiftingIntake)
+        {
+            return true;
+        }      
         if(Robot.intakePos < Constants.INTAKE_MIN_ANGLE_DOWN + Constants.DEGREES_BEFORE_MAX_TO_END)
         {
             System.out.println(Intake.intakeLiftMotor.getPosition().getValue() +" > " + (Constants.INTAKE_MIN_ANGLE_DOWN - Constants.DEGREES_BEFORE_MAX_TO_END));

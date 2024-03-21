@@ -23,7 +23,7 @@ public final class Constants {
     SHOOT_SHUTTLE_BUTTON = PS4.CIRCLE,
     FLIP_INTAKE_BUTTON = PS4.LEFT_TRIGGER,
 
-    STOP_PULSING_BUTTON = PS4.SQUARE,
+    LIFT_INAKE_ALWAYS = PS4.SQUARE,
     SHOOT_WITH_INTAKE_BUTTON = PS4.TRIANGLE,
     SHOOT_FROM_SAFTEY_BUTTON = PS4.X;
 
@@ -88,7 +88,7 @@ public final class Constants {
     //important values
     public static final double 
     MIN_POWER = 0.15,
-    MIN_TURN = 0.1,
+    MIN_TURN = 0.0,
 
     INTAKE_LOWER_SPEED = -0.25,
     INTAKE_LIFT_SPEED = .25,

@@ -5,12 +5,16 @@
 package frc.robot;
 
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.commands.DriveWithJoystick;
+import frc.robot.commands.HoldIntakeAngle;
 import frc.robot.commands.IntakeLift;
 import frc.robot.commands.IntakeLower;
 import frc.robot.commands.IntakePulse;
@@ -63,6 +67,8 @@ public class RobotContainer {
 
     public static boolean sameNote = false;
 
+    public static boolean emergencyLiftingIntake = false;
+
     public static DutyCycleEncoder intakeEncoder = new DutyCycleEncoder(9);
     public static void UpdateJoystick(){
         // DriveWithJoystick.XJoystick = THRUSTMASTER.getX();
@@ -82,7 +88,7 @@ public class RobotContainer {
         intakeNoteLimitJustUnpressed = !pressedIntakeNoteLimitSwitch && prevpressedIntakeNoteLimitSwitch;
 
 
-        for(int i = 1; i<16 ; i++)
+        for(int i = 1; i<15 ; i++)
         {
             prevButtons[i] = currentButtons[i];
             currentButtons[i] = ps4.getRawButtonPressed(i);
@@ -113,7 +119,8 @@ public class RobotContainer {
             } 
             else if(justPressedButtons[Constants.SHOOT_WITH_INTAKE_BUTTON])
             {
-                (new ShootIntakeLow()).schedule();
+                //(new ShootIntakeLow()).schedule();
+                (new HoldIntakeAngle(100, 5, Constants.INTAKE_REVERSE_SHOOT_SPEED)).schedule();
             } 
             else if(justPressedButtons[Constants.SHOOT_FROM_SAFTEY_BUTTON])
             {
@@ -121,6 +128,12 @@ public class RobotContainer {
             }
         }
         
+        if(justPressedButtons[Constants.LIFT_INAKE_ALWAYS])
+        {
+            emergencyLiftingIntake = true;
+            (new IntakeLift()).schedule();
+            
+        }
 
 
         if(justPressedButtons[Constants.FLIP_INTAKE_BUTTON] && !intakePostitionUsed){
@@ -157,5 +170,8 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Limit switch pressed: ", pressedIntakeNoteLimitSwitch);
         SmartDashboard.putBoolean("Same Note", sameNote);
     }
+  public static Command getAutonomousCommand() {
+    return new PathPlannerAuto("Test Auto");
+  }
 }
 

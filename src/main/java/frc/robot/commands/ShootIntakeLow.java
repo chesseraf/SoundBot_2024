@@ -92,8 +92,6 @@ public class ShootIntakeLow extends  Command {
         }
         Intake.intakeLiftMotor.set(Constants.INTAKE_LIFT_SPEED);
     }
-
-
   }
 
   // Called once the command ends or is interrupted.

@@ -1,0 +1,18 @@
+public class RobotContainer() {
+    public RobotContainer() {
+        // Subsystem initialization
+        Shoot = new ShootCommand();
+        IntakeLower = new IntakeLower();
+        Intake
+
+        // Register Named Commands
+        NamedCommands.registerCommand("Shoot", ShootCommand.ShootCommand());
+        NamedCommands.registerCommand("exampleCommand", exampleSubsystem.exampleCommand());
+        NamedCommands.registerCommand("someOtherCommand", new SomeOtherCommand());
+
+        // Do all other initialization
+        configureButtonBindings();
+
+        // ...
+    }
+}

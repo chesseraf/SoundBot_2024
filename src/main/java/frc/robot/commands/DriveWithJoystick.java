@@ -57,11 +57,13 @@ public class DriveWithJoystick extends Command{
     // prevRight = newRight;
 
 
-      if (turnRate > 0) {
-        turnRate = (turnRate * turnRate) * (1-Constants.MIN_TURN) + Constants.MIN_TURN;
-      } else {
-        turnRate = -  XJoystick * XJoystick * (1-Constants.MIN_TURN) - Constants.MIN_TURN;
-      }
+      // if (turnRate > 0) {
+      //   turnRate = (turnRate * turnRate) * (1-Constants.MIN_TURN) + Constants.MIN_TURN;
+      // } else {
+      //   turnRate = -turnRate * turnRate * (1-Constants.MIN_TURN) - Constants.MIN_TURN;
+      // }
+
+      turnRate = turnRate *Math.abs(turnRate)*0.9;
 
       if(Math.abs(newSpeed) < Constants.SPEED_DEAD_BAND){
         newSpeed = 0;

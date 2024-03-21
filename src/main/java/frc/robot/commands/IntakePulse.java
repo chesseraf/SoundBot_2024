@@ -100,8 +100,6 @@ public class IntakePulse extends Command{
     SmartDashboard.putNumber("TIMER", timer);
     SmartDashboard.putNumber("timeFin", timeFin);
    // SmartDashboard.putNumber("TIMER", timer);
-    
-
 
   }
 
@@ -118,8 +116,8 @@ public class IntakePulse extends Command{
       return true;
     }
     if(!Intake.intakeUp)  return true;
-    if(RobotContainer.ps4.getRawButtonPressed(Constants.STOP_PULSING_BUTTON))
-        return true;
+    // if(RobotContainer.ps4.getRawButtonPressed(Constants.STOP_PULSING_BUTTON))
+    //     return true;
     if(ShootCommand.currentlyShooting)
         return true;
     return false;

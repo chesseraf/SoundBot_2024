@@ -32,6 +32,7 @@ public class IntakeLift extends Command{
     // Called once the command ends or is interrupted.
     @Override
     public void end(boolean interrupted) {
+        RobotContainer.emergencyLiftingIntake = false;
         System.out.println("DONE lifting");
 
         RobotContainer.intakePostitionUsed = false;
@@ -49,7 +50,7 @@ public class IntakeLift extends Command{
         {
             return true;
         }
-        if(timer>300)
+        if(timer>200)
         {                        
             System.out.println("END B");
             return true;
