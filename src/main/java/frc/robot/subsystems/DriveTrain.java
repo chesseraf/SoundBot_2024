@@ -1,11 +1,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 
 public class DriveTrain extends SubsystemBase{
@@ -15,6 +17,12 @@ public class DriveTrain extends SubsystemBase{
       frontRightMotor.getConfigurator().apply(configSpeed);
       backLeftMotor.getConfigurator().apply(configSpeed);
       backRightMotor.getConfigurator().apply(configSpeed);
+
+      frontLeftMotor.setControl(new Follower(backLeftMotor.getDeviceID(), false));
+      frontRightMotor.setControl(new Follower(backRightMotor.getDeviceID(), false));
+      frontLeftMotor.getConfigurator().apply(Robot.configs);
+      frontRightMotor.getConfigurator().apply(Robot.configs);
+      
     }
 
    // TalonFX motor = new TalonFX(0); // creates a new TalonFX with ID 0
@@ -30,19 +38,19 @@ public class DriveTrain extends SubsystemBase{
 
     
     private static final DifferentialDrive frontDrive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
-    private static final DifferentialDrive backDrive = new DifferentialDrive(backLeftMotor, backRightMotor);
+    //private static final DifferentialDrive backDrive = new DifferentialDrive(backLeftMotor, backRightMotor);
     
     
    // private final boolean breaksOn = true;
 
   public static void driveBoth(double forwardPercent, double rotationPercent)
   {
-    backDrive.arcadeDrive(forwardPercent, -rotationPercent);
+   // backDrive.arcadeDrive(forwardPercent, -rotationPercent);
     frontDrive.arcadeDrive(forwardPercent, -rotationPercent);
   }
   public static void driveBothTank(double left, double right)
   {
-    backDrive.tankDrive(left, right);
+    //backDrive.tankDrive(left, right);
     frontDrive.tankDrive(left, right);
   }
 

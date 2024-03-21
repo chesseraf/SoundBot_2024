@@ -58,7 +58,7 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
 
 
 
-private final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
+public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
   /* Start at velocity 0, no feed forward, use slot 1 */
   private final VelocityTorqueCurrentFOC m_torqueVelocity = new VelocityTorqueCurrentFOC(0, 0, 0, 1, false, false, false);
 
@@ -96,6 +96,7 @@ private final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0, true
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+  public static TalonFXConfiguration configs;
   @Override
   public void robotInit() {
 
@@ -104,7 +105,7 @@ private final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0, true
     //Copied from 
     //https://github.com/CrossTheRoadElec/Phoenix6-Examples/blob/main/java/VelocityClosedLoop/src/main/java/frc/robot/Robot.java
 
-    TalonFXConfiguration configs = new TalonFXConfiguration();
+    configs = new TalonFXConfiguration();
 
     /* Voltage-based velocity requires a feed forward to account for the back-emf of the motor */
     configs.Slot0.kP = 0.11; // An error of 1 rotation per second results in 2V output
