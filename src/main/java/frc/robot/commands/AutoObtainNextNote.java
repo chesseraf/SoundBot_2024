@@ -19,11 +19,11 @@ public class AutoObtainNextNote extends Command{
 
    final static double turnRateFA = 0.255, turnTimeFA = 1.1, driveTimeFA = 12, driveSpeedFA = 0.3, initMoveSpeedFA = 0.25, initMoveTimeFA = 4;
 
-   public static Command getAutoObtainSecondNoteCommand(int col, int startingLoc, boolean closerNote)
+   public static Command getAutoObtainSecondNoteCommand(int col, int startingLoc, int noteNum)
     {
       if(startingLoc == Robot.START_NEAR_AMP)
       {
-        if(closerNote)
+        if(noteNum == Robot.CLOSER_FIRST)
         {
           if(col == Robot.COL_BLUE)
           {
@@ -87,13 +87,36 @@ public class AutoObtainNextNote extends Command{
       }
       else if(startingLoc == Robot.START_MID)
       {
+        if(noteNum == Robot.BEHIND_NOTE)
+        {
+            return((new AutoDriveUntilTimeOrNote(4, 20, true, 1, 1.1)));
+
+        }
+        else if(noteNum == Robot.LEFT_NOTE)
+        {
+            return((new DriveForTimeAtRPS(1,10)
+            .andThen(new TurnForTimeAtRPS(1, 5))
+            .andThen(new AutoDriveUntilTimeOrNote(4, 20, true, 1, 1))
+            .andThen(new TurnForTimeAtRPS(1, -5))
+            .andThen(new DriveForTimeAtRPS(1,-10))));
+
+        }
+        else if(noteNum == Robot.RIGHT)
+        {
+            return((new DriveForTimeAtRPS(1,10)));
+        }
+        
+        
+        /*
         return(
           (new AutoDriveUntilTimeOrNote(3, 0.5, true,0, 1, 1))
         );
+       */
+
       }
       else if(startingLoc == Robot.START_FAR_FROM_AMP)
       {
-        if(closerNote)
+        if(noteNum == Robot.CLOSER_FIRST)
         {
           if(col == Robot.COL_BLUE)
           {

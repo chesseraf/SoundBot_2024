@@ -39,8 +39,8 @@ public class DriveWithJoystick extends Command{
 
     
   
-    newSpeed =   -YJoystick;
-    turnRate = XJoystick;
+    turnRate =   -YJoystick;
+    newSpeed = XJoystick;
 
     // newLeft = leftJoy;
     // newRight = rightJoy;

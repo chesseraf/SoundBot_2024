@@ -18,10 +18,13 @@ public class DriveTrain extends SubsystemBase{
       backLeftMotor.getConfigurator().apply(configSpeed);
       backRightMotor.getConfigurator().apply(configSpeed);
 
-      frontLeftMotor.setControl(new Follower(backLeftMotor.getDeviceID(), false));
-      frontRightMotor.setControl(new Follower(backRightMotor.getDeviceID(), false));
+      // frontLeftMotor.setControl(new Follower(backLeftMotor.getDeviceID(), false));
+      // frontRightMotor.setControl(new Follower(backRightMotor.getDeviceID(), false));
       frontLeftMotor.getConfigurator().apply(Robot.configs);
       frontRightMotor.getConfigurator().apply(Robot.configs);
+      backLeftMotor.getConfigurator().apply(Robot.configs);
+      backRightMotor.getConfigurator().apply(Robot.configs);
+      
       
     }
 
@@ -48,6 +51,28 @@ public class DriveTrain extends SubsystemBase{
    // backDrive.arcadeDrive(forwardPercent, -rotationPercent);
     frontDrive.arcadeDrive(forwardPercent, -rotationPercent);
   }
+  public static void driveStraightRPS(double RPS)
+  {
+    DriveTrain.frontLeftMotor.setControl(Robot.m_voltageVelocity.withVelocity(RPS));
+    DriveTrain.frontRightMotor.setControl(Robot.m_voltageVelocity.withVelocity(-RPS));
+
+
+    DriveTrain.backLeftMotor.setControl(Robot.m_voltageVelocity.withVelocity(RPS));
+    DriveTrain.backRightMotor.setControl(Robot.m_voltageVelocity.withVelocity(-RPS));  
+  }
+
+  public static void turnRPS(double RPS)
+  {
+    DriveTrain.frontLeftMotor.setControl(Robot.m_voltageVelocity.withVelocity(RPS));
+    DriveTrain.frontRightMotor.setControl(Robot.m_voltageVelocity.withVelocity(RPS));
+
+
+    DriveTrain.backLeftMotor.setControl(Robot.m_voltageVelocity.withVelocity(RPS));
+    DriveTrain.backRightMotor.setControl(Robot.m_voltageVelocity.withVelocity(RPS));  
+  }
+
+  
+
   public static void driveBothTank(double left, double right)
   {
     //backDrive.tankDrive(left, right);

@@ -17,32 +17,32 @@ public class AutoDriveUntilTimeOrNote extends Command{
      */
     private int timeTaken, timeAllowedtoObtain, waitTime, timeEndWait, timeEndReturning;
     private boolean returnToStartingSpot, obtaining, currentlyWaiting;
-    private double speed, turn, returnSpeedMult;
+    private double RPS, turn, returnSpeedMult;
 
 //TODO change speed to rpm, and make distance a parameter instead of time
 //calculate time from distance and rpm
 
-    public AutoDriveUntilTimeOrNote(double maxSeconds, double speed, boolean comeBack, double turn, double waitSecondsBeforeReturning, double returnSpeedMultiplier)
+    public AutoDriveUntilTimeOrNote(double maxSeconds, double RPS, boolean comeBack, double turn, double waitSecondsBeforeReturning, double returnSpeedMultiplier)
     {
         returnSpeedMult = returnSpeedMultiplier;
         timeAllowedtoObtain = (int)(maxSeconds * 50);
         this.turn = turn;
-        this.speed = speed;
+        this.RPS = RPS;
         returnToStartingSpot = comeBack;
         timeTaken = 0;
         obtaining = true;
         waitTime = (int)(waitSecondsBeforeReturning*50);
     }
 
-    public AutoDriveUntilTimeOrNote(double maxSeconds, double speed, boolean comeBack, double waitSecondsBeforeReturning, double returnSpeedMultiplier)
+    public AutoDriveUntilTimeOrNote(double maxSeconds, double RPS, boolean comeBack, double waitSecondsBeforeReturning, double returnSpeedMultiplier)
     {
-        this(maxSeconds,  speed, comeBack, 0, waitSecondsBeforeReturning, returnSpeedMultiplier);
+        this(maxSeconds,  RPS, comeBack, 0, waitSecondsBeforeReturning, returnSpeedMultiplier);
     }
 
 
-    public AutoDriveUntilTimeOrNote(double maxSeconds, double speed, boolean comeBack, double waitSecondsBeforeReturning)
+    public AutoDriveUntilTimeOrNote(double maxSeconds, double RPS, boolean comeBack, double waitSecondsBeforeReturning)
     {
-        this(maxSeconds,  speed, comeBack, 0, waitSecondsBeforeReturning, 1);
+        this(maxSeconds,  RPS, comeBack, 0, waitSecondsBeforeReturning, 1);
     }
 
     @Override
@@ -88,11 +88,11 @@ public class AutoDriveUntilTimeOrNote extends Command{
     }
     else if(obtaining)
     {
-        DriveTrain.driveBoth(speed, turn);
+        DriveTrain.driveStraightRPS(RPS);
     }
     else
     {
-        DriveTrain.driveBoth(-speed, -turn);
+        DriveTrain.driveStraightRPS(-RPS);
     }
 
     // if(!RobotContainer.intakePostitionUsed && !Intake.intakeUp && RobotContainer.intakeNoteLimitJustPressed) 
@@ -105,7 +105,7 @@ public class AutoDriveUntilTimeOrNote extends Command{
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    DriveTrain.driveBoth(0, 0);
+    DriveTrain.driveStraightRPS(0);
   }
 
   // Returns true when the command should end.
