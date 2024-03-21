@@ -9,6 +9,12 @@ import frc.robot.subsystems.Intake;
 
 public class AutoDriveUntilTimeOrNote extends Command{
     //wait if time limit reached before note is obtained. still return
+    /**
+     * This command drives, at the given speed and turning, until it recieves a note (limit switch is pressed)
+     * OR until the max amount of time passes and it does not have a note.
+     * it can then return to its starting spot 
+     * 
+     */
     private int timeTaken, timeAllowedtoObtain, waitTime, timeEndWait, timeEndReturning;
     private boolean returnToStartingSpot, obtaining, currentlyWaiting;
     private double speed, turn, returnSpeedMult;
@@ -59,7 +65,7 @@ public class AutoDriveUntilTimeOrNote extends Command{
         {
             currentlyWaiting = true;
             timeEndWait = timeTaken + waitTime;
-            timeEndReturning = timeEndWait + timeTaken;
+            timeEndReturning = timeEndWait + (int)(timeTaken*returnSpeedMult);
 
         }
     }
@@ -67,9 +73,10 @@ public class AutoDriveUntilTimeOrNote extends Command{
     {
         obtaining = false;
         (new IntakeLift()).schedule();
+        (new SpinUpShooter()).schedule();
         if(this.returnToStartingSpot)
         {
-            timeEndReturning = 2*timeTaken;
+            timeEndReturning = (int)((1+returnSpeedMult)*timeTaken);
         }
     }
     if(currentlyWaiting)
@@ -85,7 +92,7 @@ public class AutoDriveUntilTimeOrNote extends Command{
     }
     else
     {
-        DriveTrain.driveBoth(-speed*returnSpeedMult, -turn);
+        DriveTrain.driveBoth(-speed, -turn);
     }
 
     // if(!RobotContainer.intakePostitionUsed && !Intake.intakeUp && RobotContainer.intakeNoteLimitJustPressed) 

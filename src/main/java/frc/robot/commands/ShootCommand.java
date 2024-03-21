@@ -21,7 +21,8 @@ public class ShootCommand extends Command {
   public static final int SHUTTLE_SHOT = 2, SAFTEY_SHOT = 3;
   
   private int shotType;
-  private boolean customShotInstead;
+  private boolean customShotInstead, shooterAlreadySpunUp;
+
   
 
   public ShootCommand(int shotType)
@@ -36,9 +37,12 @@ public class ShootCommand extends Command {
   public static boolean currentlyShooting = false;
   @Override
   public void initialize() {
-    if(Intake.intakeUp)
+    shooterAlreadySpunUp = SpinUpShooter.shooterSpinningUp;
+    timer = 0;
+    if(!Intake.intakeUp)
+    {}//do nothing
+    else
     {
-      timer = 0;
       currentlyShooting = true;
       System.out.println("Initialized shoot command");
     }
@@ -58,38 +62,44 @@ public class ShootCommand extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    timer++;
+
     if(Intake.intakeUp)
     {
-      if(customShotInstead)
+      if(!shooterAlreadySpunUp)
       {
-        Shooter.spinCustomSpeed();
+        if(customShotInstead)
+        {
+          Shooter.spinCustomSpeed();
+        }
+        else
+        {
+          if(shotType == HIGH_SHOT)
+          {
+            Shooter.spinShooterHighShot();
+          }
+          else if (shotType == LOW_SHOT)
+          {
+            Shooter.spinShooterLowShot();
+          }
+          else if(shotType == SHUTTLE_SHOT)
+          {                
+            Shooter.spinShooterShuttleShot();
+          }
+          else if(shotType == SAFTEY_SHOT)
+          {
+            Shooter.spinShooterSafteyShot();
+          }
+        }
+        if(timer > Constants.DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE)
+        {
+          Intake.intakeWheels.set(Constants.INTAKE_REVERSE_SHOOT_SPEED);
+        }
       }
-      else
+      else //shooter was already spun up
       {
-        if(shotType == HIGH_SHOT)
-        {
-          Shooter.spinShooterHighShot();
-        }
-        else if (shotType == LOW_SHOT)
-        {
-          Shooter.spinShooterLowShot();
-        }
-        else if(shotType == SHUTTLE_SHOT)
-        {                
-          Shooter.spinShooterShuttleShot();
-        }
-        else if(shotType == SAFTEY_SHOT)
-        {
-          Shooter.spinShooterSafteyShot();
-        }
-      }
-        
-      
-      timer++;
-      if(timer > Constants.DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE)
-      {
-        Intake.intakeWheels.set(Constants.INTAKE_REVERSE_SHOOT_SPEED);
-      }
+          Intake.intakeWheels.set(Constants.INTAKE_REVERSE_SHOOT_SPEED);
+      } 
     }
   }
 
@@ -99,20 +109,25 @@ public class ShootCommand extends Command {
     Shooter.stop();
     Intake.intakeWheels.set(0);
     currentlyShooting = false;
+    SpinUpShooter.shotJustEnded = true;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(Intake.intakeUp)
-    {
-      return(timer > Constants.DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE + Constants.DELAY_AFTER_SHOOTING_BEFORE_STOPP_SHOoTER);
-    }
-    else
+    if(!Intake.intakeUp)
     {
       return true;
     }
     
+    if(!shooterAlreadySpunUp)
+    {            
+      return(timer > Constants.DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE + Constants.DELAY_AFTER_SHOOTING_BEFORE_STOPPING_SHOOTER);
+    }
+    else
+    {
+      return(timer > Constants.DELAY_AFTER_SHOOTING_BEFORE_STOPPING_SHOOTER);
+    }   
   }
 
   public double shootSpeed(int time)

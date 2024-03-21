@@ -9,6 +9,7 @@ import frc.robot.subsystems.Intake;
 public class HoldIntakeAngle extends Command{
     private double angle, wheelsSpeed;
     private int timer, timeEnd;
+    static int holdAngleMargin = 2;
     public HoldIntakeAngle(double a, double maxSeconds, double intakeWheelsSpeed)
     {
         timeEnd =(int)( 50 * maxSeconds);
@@ -45,17 +46,18 @@ public class HoldIntakeAngle extends Command{
 
     public double speedSetter(double curA, double targetA, double vel)
     {
-        if(curA > targetA+3)
+        if(curA > targetA+holdAngleMargin)
         {
             return(-0.15);
         }
-        else if (curA > targetA - 10) {
-            return 0.05;
+        else if (curA > targetA - holdAngleMargin) {
+            return 0.1/holdAngleMargin*(targetA - curA);
         }
-        else if(curA < targetA - 3)
+        else if(curA < targetA - holdAngleMargin)
         {
             return(0.15);
         }
+        //never reaches this 0
         else{
             return 0;
         }

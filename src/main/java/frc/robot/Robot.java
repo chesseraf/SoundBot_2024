@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
-import frc.robot.commands.AutoObtainSecondNote;
+import frc.robot.commands.AutoObtainNextNote;
 import frc.robot.commands.AutoShootFirstNote;
 import frc.robot.commands.DriveForTime;
 import frc.robot.commands.DriveWithJoystick;
@@ -20,6 +20,11 @@ import frc.robot.commands.ShootCommand;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Shooter;
+
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
+
 import edu.wpi.first.cameraserver.CameraServer;
 
 
@@ -49,7 +54,17 @@ public static final SendableChooser<Integer> alternativeOuterShootingSpeedHundre
 public static final SendableChooser<Integer> alternativeInnerShootingSpeedTenths = new SendableChooser<>();
 public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundreths = new SendableChooser<>();
 
+
+
+
+
+private final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
+  /* Start at velocity 0, no feed forward, use slot 1 */
+  private final VelocityTorqueCurrentFOC m_torqueVelocity = new VelocityTorqueCurrentFOC(0, 0, 0, 1, false, false, false);
+
   
+
+
   private String dontRetreat = "No retreat", backRetreat = "retreat back", leftRetreat = "left retreat", rightRetreat = "right retreat";
 
   private String shootTwice = "shooting twice";
@@ -83,6 +98,37 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
    */
   @Override
   public void robotInit() {
+
+
+
+    //Copied from 
+    //https://github.com/CrossTheRoadElec/Phoenix6-Examples/blob/main/java/VelocityClosedLoop/src/main/java/frc/robot/Robot.java
+
+    TalonFXConfiguration configs = new TalonFXConfiguration();
+
+    /* Voltage-based velocity requires a feed forward to account for the back-emf of the motor */
+    configs.Slot0.kP = 0.11; // An error of 1 rotation per second results in 2V output
+    configs.Slot0.kI = 0.5; // An error of 1 rotation per second increases output by 0.5V every second
+    configs.Slot0.kD = 0.0001; // A change of 1 rotation per second squared results in 0.01 volts output
+    configs.Slot0.kV = 0.12; // Falcon 500 is a 500kV motor, 500rpm per V = 8.333 rps per V, 1/8.33 = 0.12 volts / Rotation per second
+    // Peak output of 8 volts
+    configs.Voltage.PeakForwardVoltage = 8;
+    configs.Voltage.PeakReverseVoltage = -8;
+    
+    /* Torque-based velocity does not require a feed forward, as torque will accelerate the rotor up to the desired velocity by itself */
+    configs.Slot1.kP = 5; // An error of 1 rotation per second results in 5 amps output
+    configs.Slot1.kI = 0.1; // An error of 1 rotation per second increases output by 0.1 amps every second
+    configs.Slot1.kD = 0.001; // A change of 1000 rotation per second squared results in 1 amp output
+
+    // Peak output of 40 amps
+    configs.TorqueCurrent.PeakForwardTorqueCurrent = 40;
+    configs.TorqueCurrent.PeakReverseTorqueCurrent = -40;
+
+
+
+
+
+
     //CameraServer.startAutomaticCapture();
 
     for(int i=0; i<16; i++)
@@ -197,8 +243,6 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
   @Override
   public void autonomousInit() {
 
-
-      
       retreatChosen = autoRetreatChoice.getSelected();
       startLoc = startLocChooser.getSelected();
       teamCol = colorChooser.getSelected();
@@ -225,36 +269,39 @@ public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundre
       }
 
       System.out.println(shootSequenceChosen);
-      if(shootSequenceChosen == shootTwiceObtainThird)
+
+      if(shootSequenceChosen == shootThreeTimes)
       {
-        shootingSequenceCommand = (new AutoShootFirstNote()).andThen(new IntakeLower()).andThen
-        (AutoObtainSecondNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote == CLOSER_FIRST))
-        .andThen(new ShootCommand()).andThen(AutoObtainSecondNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote == CLOSER_FIRST));
-      }
-      else if(shootSequenceChosen == shootThreeTimes)
-      {
-        shootingSequenceCommand = (new AutoShootFirstNote()).andThen(new IntakeLower()).andThen
-        (AutoObtainSecondNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote == CLOSER_FIRST))
-        .andThen(new ShootCommand()).andThen(AutoObtainSecondNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote == CLOSER_FIRST))
+        shootingSequenceCommand = (new ShootCommand()).andThen(new IntakeLower()).andThen
+        (AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote == CLOSER_FIRST))
+        .andThen(new ShootCommand()).andThen(new IntakeLower())
+        .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote != CLOSER_FIRST))
         .andThen(new ShootCommand());
       }
+      else if(shootSequenceChosen == shootTwiceObtainThird)
+      {
+        shootingSequenceCommand = (new ShootCommand()).andThen(new IntakeLower()).andThen
+        (AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote == CLOSER_FIRST))
+        .andThen(new ShootCommand()).andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote != CLOSER_FIRST));
+      }
+      
       else if(shootSequenceChosen == shootTwice)
       {
-        shootingSequenceCommand = (new AutoShootFirstNote()).andThen(new IntakeLower()).andThen
-        (AutoObtainSecondNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote == CLOSER_FIRST))
+        shootingSequenceCommand = (new ShootCommand()).andThen(new IntakeLower()).andThen
+        (AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, secondNote == CLOSER_FIRST))
         .andThen(new ShootCommand());
-      }
-      else if(shootSequenceChosen == shootOnce)
-      {
-        commandsUntilRetreat = 1;
-        shootingSequenceCommand = new AutoShootFirstNote();
       }
       else if(shootSequenceChosen == shootOnceObtainSecond)
       {
         commandsUntilRetreat = 2;
-        shootingSequenceCommand = new AutoShootFirstNote().andThen(new IntakeLower()).andThen(new AutoObtainSecondNote(false));
+        shootingSequenceCommand = new ShootCommand().andThen(new IntakeLower()).andThen(new AutoObtainNextNote(false));
       }
-      else
+      else if(shootSequenceChosen == shootOnce)
+      {
+        commandsUntilRetreat = 1;
+        shootingSequenceCommand = new ShootCommand();
+      }
+      else //no shooting
       {
         commandsUntilRetreat = 0;
         shootingSequenceCommand = new DriveForTime(0, 0,  0);

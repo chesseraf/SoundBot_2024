@@ -7,15 +7,19 @@ import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
 
 
-public class AutoObtainSecondNote extends Command{
+public class AutoObtainNextNote extends Command{
   //obtain the next planned note for the auto
 
     int timer;
     boolean comeBack;
    public static Command obtainSecondNote;
+//CA - closer note near amp
+   final static double turnRateCA = 0.268, turnTimeCA = 1.15, driveTimeCA = 4, driveSpeedCA = 0.6, initMoveSpeedCA = 0.5, initMoveTimeCA = 0.4;
+   //FA - further note near amp
 
-   final static double turnRate = 0.255, turnTime = 1, driveTime = 5, driveSpeed = 0.3, initMoveSpeed = 0.25, initMoveTime = 1;
-    public static Command getAutoObtainSecondNoteCommand(int col, int startingLoc, boolean closerNote)
+   final static double turnRateFA = 0.255, turnTimeFA = 1.1, driveTimeFA = 12, driveSpeedFA = 0.3, initMoveSpeedFA = 0.25, initMoveTimeFA = 4;
+
+   public static Command getAutoObtainSecondNoteCommand(int col, int startingLoc, boolean closerNote)
     {
       if(startingLoc == Robot.START_NEAR_AMP)
       {
@@ -24,36 +28,36 @@ public class AutoObtainSecondNote extends Command{
           if(col == Robot.COL_BLUE)
           {
             return(
-              (new Wait(2)).andThen
-              (new DriveForTime(initMoveTime, initMoveSpeed,0)).andThen
-              (new Wait(2)).andThen
-              (new DriveForTime(turnTime, 0, turnRate)).andThen
-              (new Wait(2)).andThen
+              //(new Wait(2)).andThen
+              (new DriveForTime(initMoveTimeCA, initMoveSpeedCA,0)).andThen
+              //(new Wait(2)).andThen
+              (new DriveForTime(turnTimeCA, 0, turnRateCA)).andThen
+              //(new Wait(2)).andThen
               
-              (new AutoDriveUntilTimeOrNote(driveTime, driveSpeed, true, 1)).andThen
-              (new Wait(2)).andThen
-              (new DriveForTime(turnTime, 0, -turnRate)).andThen
-              (new Wait(2)).andThen
-              (new DriveForTime(initMoveTime, -initMoveSpeed,0)).andThen
-              (new Wait(2))
+              (new AutoDriveUntilTimeOrNote(driveTimeCA, driveSpeedCA, true, 1, 0.9)).andThen
+              //(new Wait(2)).andThen
+              (new DriveForTime(turnTimeCA*1.1, 0, -turnRateCA)).andThen
+              //(new Wait(2)).andThen
+              (new DriveForTime(initMoveTimeCA*1.2, -initMoveSpeedCA,0))
+              //.andThen(new Wait(2))
             );
           }
           else //red so the turning is reversed
           {
-            return(
-            (new Wait(2)).andThen
-            (new DriveForTime(initMoveTime, initMoveSpeed,0)).andThen
-            (new Wait(2)).andThen
-            (new DriveForTime(turnTime, 0, turnRate    *(-1))).andThen
-            (new Wait(2)).andThen
+            // return(
+            // (new Wait(2)).andThen
+            // (new DriveForTime(initMoveTime, initMoveSpeed,0)).andThen
+            // (new Wait(2)).andThen
+            // (new DriveForTime(turnTime, 0, turnRate    *(-1))).andThen
+            // (new Wait(2)).andThen
             
-            (new AutoDriveUntilTimeOrNote(driveTime, driveSpeed, true, 1)).andThen
-            (new Wait(2)).andThen
-            (new DriveForTime(turnTime, 0, -turnRate    *(-1))).andThen
-            (new Wait(2)).andThen
-            (new DriveForTime(initMoveTime, -initMoveSpeed,0)).andThen
-            (new Wait(2))
-            );
+            // (new AutoDriveUntilTimeOrNote(driveTime, driveSpeed, true, 1)).andThen
+            // (new Wait(2)).andThen
+            // (new DriveForTime(turnTime, 0, -turnRate    *(-1))).andThen
+            // (new Wait(2)).andThen
+            // (new DriveForTime(initMoveTime, -initMoveSpeed,0)).andThen
+            // (new Wait(2))
+            // );
           }
         }
         else //further Note
@@ -62,16 +66,16 @@ public class AutoObtainSecondNote extends Command{
           {
             return(
               (new Wait(2)).andThen
-              (new DriveForTime(initMoveTime, initMoveSpeed,0)).andThen
+              (new DriveForTime(initMoveTimeFA, initMoveSpeedFA,0)).andThen
               (new Wait(2)).andThen
-              (new DriveForTime(turnTime, 0, turnRate)).andThen
+              (new DriveForTime(turnTimeFA, 0, turnRateFA)).andThen
               (new Wait(2)).andThen
               
-              (new AutoDriveUntilTimeOrNote(driveTime, driveSpeed, true, 1, 0.8)).andThen
+              (new AutoDriveUntilTimeOrNote(driveTimeFA, driveSpeedFA, true, 1, 0.8)).andThen
               (new Wait(2)).andThen
-              (new DriveForTime(turnTime, 0, -turnRate)).andThen
+              (new DriveForTime(turnTimeFA, 0, -turnRateFA)).andThen
               (new Wait(2)).andThen
-              (new DriveForTime(initMoveTime, -initMoveSpeed,0)).andThen
+              (new DriveForTime(initMoveTimeFA, -initMoveSpeedFA,0)).andThen
               (new Wait(2))
             );
           }
@@ -115,7 +119,7 @@ public class AutoObtainSecondNote extends Command{
       return obtainSecondNote;
     }
 
-    public AutoObtainSecondNote(boolean comeBack)
+    public AutoObtainNextNote(boolean comeBack)
     {
       this.comeBack = comeBack;
     }

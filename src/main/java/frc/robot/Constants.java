@@ -25,7 +25,8 @@ public final class Constants {
 
     LIFT_INAKE_ALWAYS = PS4.SQUARE,
     SHOOT_WITH_INTAKE_BUTTON = PS4.TRIANGLE,
-    SHOOT_FROM_SAFTEY_BUTTON = PS4.X;
+    SHOOT_FROM_SAFTEY_BUTTON = PS4.X,
+    STOP_SPUN_SHOOTER_BUTTON = PS4.OPTIONS;
 
     // public static final int 
     // SHOOT_HIGH_BUTTON = 1,
@@ -60,7 +61,7 @@ public final class Constants {
 
     public static final double DELAY_AFTER_STOPPING_INTAKE_AND_LIFTING = 0.5,
     DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE = 1.3 * 50, //cycles
-    DELAY_AFTER_SHOOTING_BEFORE_STOPP_SHOoTER = 1*50
+    DELAY_AFTER_SHOOTING_BEFORE_STOPPING_SHOOTER = 1*50
     ;
 
     public static final double AUTO_OBTAIN_SECOND_NOTE_SPEED = 0.5;
