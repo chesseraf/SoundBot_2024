@@ -114,7 +114,11 @@ public class ShootCommand extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    Shooter.stop();
+    if(!SpinUpShooter.shooterSpinningUp)
+    {
+      Shooter.stop();
+    }
+    
     Intake.intakeWheels.set(0);
     currentlyShooting = false;
     SpinUpShooter.shotJustEnded = true;
@@ -128,7 +132,7 @@ public class ShootCommand extends Command {
       return true;
     }
     
-    if(!shooterAlreadySpunUp || true)
+    if(!shooterAlreadySpunUp)
     {            
       return(timer > Constants.DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE + Constants.DELAY_AFTER_SHOOTING_BEFORE_STOPPING_SHOOTER);
     }

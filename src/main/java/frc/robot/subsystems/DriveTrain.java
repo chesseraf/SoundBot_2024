@@ -15,7 +15,7 @@ import frc.robot.Robot;
 public class DriveTrain extends SubsystemBase{
     //OpenLoopRampsConfigs openLoopRampsConfigs = new OpenLoopRampsConfigs();
     public static void applyConfig() {
-      enterBreak();
+      
       frontLeftMotor.getConfigurator().apply(configSpeed);
       frontRightMotor.getConfigurator().apply(configSpeed);
       backLeftMotor.getConfigurator().apply(configSpeed);
@@ -27,6 +27,8 @@ public class DriveTrain extends SubsystemBase{
       frontRightMotor.getConfigurator().apply(Robot.configs);
       backLeftMotor.getConfigurator().apply(Robot.configs);
       backRightMotor.getConfigurator().apply(Robot.configs);
+      enterBreak();
+
 
       
       

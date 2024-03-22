@@ -6,7 +6,6 @@ import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.DriveTrain;
 
-
 public class AutoObtainNextNote extends Command{
   //obtain the next planned note for the auto
 
@@ -161,60 +160,60 @@ public class AutoObtainNextNote extends Command{
       return obtainSecondNote;
     }
 
-    public AutoObtainNextNote(boolean comeBack)
-    {
-      this.comeBack = comeBack;
-    }
+//     public AutoObtainNextNote(boolean comeBack)
+//     {
+//       this.comeBack = comeBack;
+//     }
 
-    @Override
-  public void initialize() {
+//     @Override
+//   public void initialize() {
 
-    timer = 0;
+//     timer = 0;
 
-  }
+//   }
 
-  // Called every time the scheduler runs while the command is scheduled.
-  @Override
-  public void execute() {
-    timer++;
+//   // Called every time the scheduler runs while the command is scheduled.
+//   @Override
+//   public void execute() {
+//     timer++;
 
-    if(Robot.startLoc == Robot.START_MID)
-    {
-      DriveTrain.driveBoth(Constants.AUTO_OBTAIN_SECOND_NOTE_SPEED, 0);
-    }
- //   else if(Robot.startLoc == Robot.START_NEAR_AMP)
+//     if(Robot.startLoc == Robot.START_MID)
+//     {
+//       DriveTrain.driveBoth(Constants.AUTO_OBTAIN_SECOND_NOTE_SPEED, 0);
+//     }
+//  //   else if(Robot.startLoc == Robot.START_NEAR_AMP)
     
 
-  }
+//   }
 
-  // Called once the command ends or is interrupted.
-  @Override
-  public void end(boolean interrupted) {
-    DriveTrain.driveBoth(0, 0);
-    // if(comeBack)
-    // {
-    //     (new Wait(0.5))
-    //     .andThen(new IntakeLift())
-    //     .andThen(new DriveForTime(timer/50.0 *1.1,-Constants.AUTO_OBTAIN_SECOND_NOTE_SPEED, 0.0))
-    //     .andThen(new ShootCommand()).schedule();
-    // }
-    // else
-    // {
-    //   (new Wait(0.5))
-    //     .andThen(new IntakeLift()).schedule();
-    // }
+//   // Called once the command ends or is interrupted.
+//   @Override
+//   public void end(boolean interrupted) {
+//     DriveTrain.driveBoth(0, 0);
+//     // if(comeBack)
+//     // {
+//     //     (new Wait(0.5))
+//     //     .andThen(new IntakeLift())
+//     //     .andThen(new DriveForTime(timer/50.0 *1.1,-Constants.AUTO_OBTAIN_SECOND_NOTE_SPEED, 0.0))
+//     //     .andThen(new ShootCommand()).schedule();
+//     // }
+//     // else
+//     // {
+//     //   (new Wait(0.5))
+//     //     .andThen(new IntakeLift()).schedule();
+//     // }
     
 
-  }
+//   }
 
-  // Returns true when the command should end.
-  @Override
-  public boolean isFinished() {
-    if(RobotContainer.pressedIntakeNoteLimitSwitch)// || timer > 50*Constants.ATUO_DRIVE_BACK_SECONDS)
-    {
-        return true;
-    }
-    return false;
-  }
+//   // Returns true when the command should end.
+//   @Override
+//   public boolean isFinished() {
+//     if(RobotContainer.pressedIntakeNoteLimitSwitch)// || timer > 50*Constants.ATUO_DRIVE_BACK_SECONDS)
+//     {
+//         return true;
+//     }
+//     return false;
+//   }
 
 }

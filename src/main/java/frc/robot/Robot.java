@@ -27,6 +27,7 @@ import frc.robot.subsystems.Shooter;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.cameraserver.CameraServer;
 
@@ -129,10 +130,6 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
     configs.TorqueCurrent.PeakReverseTorqueCurrent = -40;
 
 
-
-
-
-
     //CameraServer.startAutomaticCapture();
 
     for(int i=0; i<16; i++)
@@ -141,6 +138,8 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
     }
 
     DriveTrain.applyConfig();
+    Intake.intakeLiftMotor.setNeutralMode(NeutralModeValue.Brake);
+
     startLocChooser.setDefaultOption(neamAmp, START_NEAR_AMP);
     startLocChooser.addOption(farFromAmp, START_FAR_FROM_AMP);
     startLocChooser.addOption(mid, START_MID);
@@ -362,7 +361,7 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
   @Override
   public void autonomousPeriodic() {}
 
-  
+
   @Override
   public void teleopInit() {
     driveCommand.schedule();

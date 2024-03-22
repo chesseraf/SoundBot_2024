@@ -87,7 +87,6 @@ public class RobotContainer {
         intakeNoteLimitJustPressed = pressedIntakeNoteLimitSwitch && !prevpressedIntakeNoteLimitSwitch;
         intakeNoteLimitJustUnpressed = !pressedIntakeNoteLimitSwitch && prevpressedIntakeNoteLimitSwitch;
 
-
         for(int i = 1; i<15 ; i++)
         {
             prevButtons[i] = currentButtons[i];
