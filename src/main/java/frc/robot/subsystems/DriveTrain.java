@@ -1,8 +1,10 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix6.configs.OpenLoopRampsConfigs;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,6 +15,7 @@ import frc.robot.Robot;
 public class DriveTrain extends SubsystemBase{
     //OpenLoopRampsConfigs openLoopRampsConfigs = new OpenLoopRampsConfigs();
     public static void applyConfig() {
+      enterBreak();
       frontLeftMotor.getConfigurator().apply(configSpeed);
       frontRightMotor.getConfigurator().apply(configSpeed);
       backLeftMotor.getConfigurator().apply(configSpeed);
@@ -24,6 +27,8 @@ public class DriveTrain extends SubsystemBase{
       frontRightMotor.getConfigurator().apply(Robot.configs);
       backLeftMotor.getConfigurator().apply(Robot.configs);
       backRightMotor.getConfigurator().apply(Robot.configs);
+
+      
       
       
     }
@@ -105,11 +110,11 @@ public class DriveTrain extends SubsystemBase{
     //   backRightMotor.setNeutralMode(NeutralMode.Coast);
     }
 
-    public void enterBreak(){
-    //   frontLeftMotor.setNeutralMode(NeutralMode.Brake);
-    //   frontRightMotor.setNeutralMode(NeutralMode.Brake);
-    //   backLeftMotor.setNeutralMode(NeutralMode.Brake);
-    //   backRightMotor.setNeutralMode(NeutralMode.Brake);
+    public static void enterBreak(){
+       frontLeftMotor.setNeutralMode(NeutralModeValue.Brake);
+       frontRightMotor.setNeutralMode(NeutralModeValue.Brake);
+       backLeftMotor.setNeutralMode(NeutralModeValue.Brake);
+       backRightMotor.setNeutralMode(NeutralModeValue.Brake);
     }
     public void stop(){
       driveBoth(0, 0);

@@ -17,6 +17,8 @@ import frc.robot.commands.DriveForTime;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.IntakeLower;
 import frc.robot.commands.ShootCommand;
+import frc.robot.commands.SimultaneousCommand;
+import frc.robot.commands.SpinUpShooter;
 import frc.robot.commands.Wait;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
@@ -72,12 +74,12 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
   private String shootOnceObtainSecond = "obtain second, dont shoot it";
   private String shootOnce = "shoot one time";
   private String dontShoot = "zero shots", shootTwiceObtainThird = "shooting twice, obtaining third",
-  shootThreeTimes = "shoot 3 times", shootFourTimes = "Shoot 4 times";
+  shootThreeTimes = "shoot 3 times", shootFourTimes = "Shoot 4 times", shootThreeTimesObtainFourth = "Shoot 3 times, obtain 4th";
 
 
   private Command retreatCommand, shootingSequenceCommand;
 
-  public static final int START_NEAR_AMP = 0, START_MID = 1, START_FAR_FROM_AMP = 2, COL_RED = 0, COL_BLUE = 1, CLOSER_FIRST = 0, FURTHER_FIRST = 1, BEHIND_NOTE = 2, LEFT_NOTE = 3, RIGHT = 4;
+  public static int START_NEAR_AMP = 0, START_MID = 1, START_FAR_FROM_AMP = 2, COL_RED = 0, COL_BLUE = 1, CLOSER_FIRST = 0, FURTHER_FIRST = 1, BEHIND_NOTE = 2, LEFT_NOTE = 3, RIGHT = 4;
   public static final String neamAmp = "nearAmp", farFromAmp = "FAR FROM AMP", mid = "MID", red = "RED", blue = "BLUE";
   public static int startLoc, teamCol, secondNote;
   public SendableChooser<Integer> startLocChooser = new SendableChooser<Integer>();
@@ -146,15 +148,16 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
     colorChooser.setDefaultOption(blue, COL_BLUE);
     colorChooser.addOption(red, COL_RED);
 
-    secondNoteChooser.setDefaultOption("Closer note first", CLOSER_FIRST);
-    secondNoteChooser.addOption("Further not first", FURTHER_FIRST);
+    secondNoteChooser.setDefaultOption("Closer or Left note first", CLOSER_FIRST);
+    secondNoteChooser.addOption("Further or right note first", FURTHER_FIRST);
 
-    autoShootingSequence.setDefaultOption(shootTwice, shootTwice);
-    autoShootingSequence.addOption(shootOnceObtainSecond, shootOnceObtainSecond);
+    autoShootingSequence.setDefaultOption(dontShoot, dontShoot);
     autoShootingSequence.addOption(shootOnce, shootOnce);
-    autoShootingSequence.addOption(dontShoot, dontShoot);
-    autoShootingSequence.addOption(shootTwiceObtainThird, dontShoot);
+    autoShootingSequence.addOption(shootOnceObtainSecond, shootOnceObtainSecond);
+    autoShootingSequence.addOption(shootTwice, shootTwice);
+    autoShootingSequence.addOption(shootTwiceObtainThird, shootTwiceObtainThird);
     autoShootingSequence.addOption(shootThreeTimes, shootThreeTimes);
+    autoShootingSequence.addOption(shootThreeTimesObtainFourth, shootThreeTimesObtainFourth);
     autoShootingSequence.addOption(shootFourTimes, shootFourTimes);
     
 
@@ -208,7 +211,6 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
 
     CommandScheduler.getInstance().run();
    
-    RobotContainer.activateButton();
     intakePos = -RobotContainer.intakeEncoder.getAbsolutePosition() * 360;
     intakePos -= Constants.EncoderOffset;
 
@@ -272,40 +274,72 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
       }
 
       System.out.println(shootSequenceChosen);
+      SmartDashboard.putString("INTAKE  is up", ((Boolean)(Intake.intakeUp)).toString());
+      int noteTwo = LEFT_NOTE;
+      int noteThree = RIGHT;
+      double timeWaitWhenIntakeLowering = 0.7;
 
-      if(shootSequenceChosen == shootFourTimes)
+      if(shootSequenceChosen == shootFourTimes || shootSequenceChosen == shootThreeTimesObtainFourth)
       {
-        shootingSequenceCommand =  (new ShootCommand())//.andThen(new IntakeLower())
+        
+        if(secondNoteChooser.getSelected() != CLOSER_FIRST)//closer first means left first, as seen on the dashboard
+        {
+          noteTwo = RIGHT;
+          noteThree = LEFT_NOTE;
+        }
+        SmartDashboard.putString("AUTO RUNNING", "4 note!");
+
+        shootingSequenceCommand =  (new ShootCommand()).andThen(new SimultaneousCommand(new IntakeLower()))
+        .andThen(new Wait(timeWaitWhenIntakeLowering))
         .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, BEHIND_NOTE))
-        .andThen(new ShootCommand())//.andThen(new Wait(5))//.andThen(new IntakeLower())
-        .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, LEFT_NOTE))
-        .andThen(new ShootCommand());
+        .andThen(new Wait(0.1))
+        .andThen(new ShootCommand()).andThen(new SimultaneousCommand(new IntakeLower()))
+        .andThen(new Wait(timeWaitWhenIntakeLowering))
+        .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, noteTwo))
+        .andThen(new ShootCommand())
+        .andThen(new Wait(0.5))
+        .andThen(new SimultaneousCommand(new IntakeLower()))
+        .andThen(new Wait(timeWaitWhenIntakeLowering))
+        .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, noteThree))
+        .andThen(new ShootCommand())
+        ;
+        
+        
+        //(new Wait(5).andThen(new SpinUpShooter())).schedule();
       }
       else if(shootSequenceChosen == shootThreeTimes)
       {
-        shootingSequenceCommand = (new ShootCommand()).andThen(new IntakeLower()).andThen
-        (AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, CLOSER_FIRST))
-        .andThen(new ShootCommand()).andThen(new IntakeLower())
-        .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, FURTHER_FIRST))
-        .andThen(new ShootCommand());
+        shootingSequenceCommand =  (new ShootCommand()).andThen(new SimultaneousCommand(new IntakeLower()))
+        .andThen(new Wait(timeWaitWhenIntakeLowering))
+        .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, BEHIND_NOTE))
+        .andThen(new Wait(0.1))
+        .andThen(new ShootCommand()).andThen(new SimultaneousCommand(new IntakeLower()))
+        .andThen(new Wait(timeWaitWhenIntakeLowering))
+        .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, noteTwo))
+        .andThen(new ShootCommand())
+        ;
       }
       else if(shootSequenceChosen == shootTwiceObtainThird)
       {
-        shootingSequenceCommand = (new ShootCommand()).andThen(new IntakeLower()).andThen
-        (AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, CLOSER_FIRST))
-        .andThen(new ShootCommand()).andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, FURTHER_FIRST));
+        shootingSequenceCommand =  (new ShootCommand()).andThen(new SimultaneousCommand(new IntakeLower()))
+        .andThen(new Wait(timeWaitWhenIntakeLowering))
+        .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, BEHIND_NOTE))
+        .andThen(new Wait(0.1))
+        .andThen(new ShootCommand()).andThen(new SimultaneousCommand(new IntakeLower()))
+        .andThen(new Wait(timeWaitWhenIntakeLowering))
+        .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, noteTwo))
+        .andThen(new ShootCommand())
+        ;
       }
       
-      else if(shootSequenceChosen == shootTwice)
+      else if(shootSequenceChosen == shootTwice || shootSequenceChosen == shootOnceObtainSecond)
       {
-        shootingSequenceCommand = (new ShootCommand()).andThen(new IntakeLower()).andThen
-        (AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, CLOSER_FIRST))
-        .andThen(new ShootCommand());
-      }
-      else if(shootSequenceChosen == shootOnceObtainSecond)
-      {
-        commandsUntilRetreat = 2;
-        shootingSequenceCommand = new ShootCommand().andThen(new IntakeLower()).andThen(new AutoObtainNextNote(false));
+        shootingSequenceCommand =  (new ShootCommand()).andThen(new SimultaneousCommand(new IntakeLower()))
+        .andThen(new Wait(timeWaitWhenIntakeLowering))
+        .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, BEHIND_NOTE))
+        .andThen(new Wait(0.1))
+        .andThen(new ShootCommand())
+        ;
       }
       else if(shootSequenceChosen == shootOnce)
       {
@@ -318,7 +352,8 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
         shootingSequenceCommand = new DriveForTime(0, 0,  0);
       }
 
-      shootingSequenceCommand.andThen(retreatCommand).schedule();
+      (new SpinUpShooter()).schedule();
+      (new Wait(1.5)).andThen(shootingSequenceCommand).andThen(retreatCommand).schedule();
   }
 //  private String dontRetreat = "No retreat", backRetreat = "retreat back", leftRetreat = "left retreat", rightRetreat = "right retreat";
 
@@ -327,6 +362,7 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
   @Override
   public void autonomousPeriodic() {}
 
+  
   @Override
   public void teleopInit() {
     driveCommand.schedule();
@@ -334,7 +370,10 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {  }
+  public void teleopPeriodic() {
+        RobotContainer.activateButton();
+
+    }
 
   @Override
   public void testInit() {

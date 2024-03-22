@@ -73,7 +73,7 @@ public class AutoDriveUntilTimeOrNote extends Command{
     {
         obtaining = false;
         (new IntakeLift()).schedule();
-        (new SpinUpShooter()).schedule();
+        //(new SpinUpShooter()).schedule();
         if(this.returnToStartingSpot)
         {
             timeEndReturning = (int)((1+returnSpeedMult)*timeTaken);

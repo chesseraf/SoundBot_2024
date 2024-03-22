@@ -11,7 +11,7 @@ public class SpinUpShooter extends Command{
   private int shotType;
   private boolean customShotInstead;
   public static boolean shotJustEnded;
-  int timer;
+  public static int timer;
   public static boolean shooterSpinningUp = false;
 
   
@@ -23,6 +23,10 @@ public class SpinUpShooter extends Command{
   public SpinUpShooter()
   {
     this(ShootCommand.HIGH_SHOT);
+  }
+  public static boolean isSpunUp()
+  {
+    return timer > 60;
   }
   
   @Override
@@ -80,13 +84,14 @@ public class SpinUpShooter extends Command{
   public void end(boolean interrupted) {
     Shooter.stop();
     shooterSpinningUp = false;
+    timer = 0;
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() 
   {  
-    if(shotJustEnded || RobotContainer.justPressedButtons[Constants.STOP_SPUN_SHOOTER_BUTTON])
+    if(/*shotJustEnded || */RobotContainer.justPressedButtons[Constants.STOP_SPUN_SHOOTER_BUTTON])
     {
         return true;
     }

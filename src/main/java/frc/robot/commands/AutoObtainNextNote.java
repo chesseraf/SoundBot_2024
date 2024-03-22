@@ -19,6 +19,16 @@ public class AutoObtainNextNote extends Command{
 
    final static double turnRateFA = 0.255, turnTimeFA = 1.1, driveTimeFA = 12, driveSpeedFA = 0.3, initMoveSpeedFA = 0.25, initMoveTimeFA = 4;
 
+   // return((new DriveForTimeAtRPS(1,10)
+            // .andThen(new TurnForTimeAtRPS(1, -5))
+            // .andThen(new AutoDriveUntilTimeOrNote(4, 20, true, 1, 1))
+            // .andThen(new TurnForTimeAtRPS(1, 5))
+            // .andThen(new DriveForTimeAtRPS(1,-10)))
+            // .andThen(new DriveForTimeAtRPS(0.1, 0))
+            // );
+   final static double sideNoteInitSpeedRPS = 15,  sideNoteTurnRateRPS = 10., sideNoteDriveSpeedRPS = 20;
+   final static double sideNoteInitTime = 0.5,  sideNoteTurnRateTime = 0.52, sideNoteDriveTime = 4;
+   
    public static Command getAutoObtainSecondNoteCommand(int col, int startingLoc, int noteNum)
     {
       if(startingLoc == Robot.START_NEAR_AMP)
@@ -92,18 +102,27 @@ public class AutoObtainNextNote extends Command{
             return((new AutoDriveUntilTimeOrNote(4, 20, true, 1, 1.1)));
 
         }
-        else if(noteNum == Robot.LEFT_NOTE)
+        else if((noteNum == Robot.LEFT_NOTE && col == Robot.COL_BLUE) || (noteNum == Robot.RIGHT && col == Robot.COL_RED))
         {
-            return((new DriveForTimeAtRPS(1,10)
-            .andThen(new TurnForTimeAtRPS(1, 5))
-            .andThen(new AutoDriveUntilTimeOrNote(4, 20, true, 1, 1))
-            .andThen(new TurnForTimeAtRPS(1, -5))
-            .andThen(new DriveForTimeAtRPS(1,-10))));
+            return((new DriveForTimeAtRPS(sideNoteInitTime, sideNoteInitSpeedRPS)
+            .andThen(new TurnForTimeAtRPS(sideNoteTurnRateTime, sideNoteTurnRateRPS))
+            .andThen(new AutoDriveUntilTimeOrNote(sideNoteDriveTime, sideNoteDriveSpeedRPS, true, 1, 1))
+            .andThen(new TurnForTimeAtRPS(sideNoteTurnRateTime, -sideNoteTurnRateRPS))
+            .andThen(new DriveForTimeAtRPS(sideNoteInitTime, -sideNoteInitSpeedRPS))
+            .andThen(new DriveForTimeAtRPS(0.1, 0))) //stop
+            );
 
         }
-        else if(noteNum == Robot.RIGHT)
+        else if((noteNum == Robot.RIGHT && col == Robot.COL_RED) || (noteNum == Robot.LEFT_NOTE && col == Robot.COL_BLUE))
         {
-            return((new DriveForTimeAtRPS(1,10)));
+          return((new DriveForTimeAtRPS(sideNoteInitTime, sideNoteInitSpeedRPS)
+            .andThen(new TurnForTimeAtRPS(sideNoteTurnRateTime, -sideNoteTurnRateRPS))
+            .andThen(new AutoDriveUntilTimeOrNote(sideNoteDriveTime, sideNoteDriveSpeedRPS, true, 1, 1))
+            .andThen(new TurnForTimeAtRPS(sideNoteTurnRateTime, sideNoteTurnRateRPS))
+            .andThen(new DriveForTimeAtRPS(sideNoteInitTime, sideNoteInitSpeedRPS))
+            .andThen(new DriveForTimeAtRPS(0.1, 0))) //stop
+            );
+            
         }
         
         
@@ -172,18 +191,18 @@ public class AutoObtainNextNote extends Command{
   @Override
   public void end(boolean interrupted) {
     DriveTrain.driveBoth(0, 0);
-    if(comeBack)
-    {
-        (new Wait(0.5))
-        .andThen(new IntakeLift())
-        .andThen(new DriveForTime(timer/50.0 *1.1,-Constants.AUTO_OBTAIN_SECOND_NOTE_SPEED, 0.0))
-        .andThen(new ShootCommand()).schedule();
-    }
-    else
-    {
-      (new Wait(0.5))
-        .andThen(new IntakeLift()).schedule();
-    }
+    // if(comeBack)
+    // {
+    //     (new Wait(0.5))
+    //     .andThen(new IntakeLift())
+    //     .andThen(new DriveForTime(timer/50.0 *1.1,-Constants.AUTO_OBTAIN_SECOND_NOTE_SPEED, 0.0))
+    //     .andThen(new ShootCommand()).schedule();
+    // }
+    // else
+    // {
+    //   (new Wait(0.5))
+    //     .andThen(new IntakeLift()).schedule();
+    // }
     
 
   }

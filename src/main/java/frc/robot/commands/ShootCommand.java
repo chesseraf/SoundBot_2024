@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.Robot;
@@ -37,7 +38,7 @@ public class ShootCommand extends Command {
   public static boolean currentlyShooting = false;
   @Override
   public void initialize() {
-    shooterAlreadySpunUp = SpinUpShooter.shooterSpinningUp;
+    shooterAlreadySpunUp = SpinUpShooter.isSpunUp();
     timer = 0;
     if(!Intake.intakeUp)
     {}//do nothing
@@ -64,6 +65,9 @@ public class ShootCommand extends Command {
   public void execute() {
     timer++;
 
+    SmartDashboard.putNumber( "shooting timer ",timer);
+    SmartDashboard.putBoolean( "spun up already ",shooterAlreadySpunUp);
+    
     if(Intake.intakeUp)
     {
       if(!shooterAlreadySpunUp)
@@ -101,6 +105,10 @@ public class ShootCommand extends Command {
           Intake.intakeWheels.set(Constants.INTAKE_REVERSE_SHOOT_SPEED);
       } 
     }
+    else
+    {
+      SmartDashboard.putString("INTAKE IS DOWN", "INTAKE IS DOWN");
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -120,7 +128,7 @@ public class ShootCommand extends Command {
       return true;
     }
     
-    if(!shooterAlreadySpunUp)
+    if(!shooterAlreadySpunUp || true)
     {            
       return(timer > Constants.DELAY_STARTING_SHOOTER_BEFORE_REVERSE_INTAKE + Constants.DELAY_AFTER_SHOOTING_BEFORE_STOPPING_SHOOTER);
     }
