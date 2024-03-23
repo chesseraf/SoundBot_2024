@@ -6,7 +6,7 @@ import frc.robot.subsystems.DriveTrain;
 
 public class DriveForTimeAtRPS extends Command {
     private double totTime, RPS;
-    int timer;
+    private int timer;
     public DriveForTimeAtRPS(double seconds, double RPS)
     {
         this.totTime = seconds*50;
@@ -28,7 +28,6 @@ public class DriveForTimeAtRPS extends Command {
 
     DriveTrain.frontLeftMotor.setControl(Robot.m_voltageVelocity.withVelocity(RPS));
     DriveTrain.frontRightMotor.setControl(Robot.m_voltageVelocity.withVelocity(-RPS));
-
 
     DriveTrain.backLeftMotor.setControl(Robot.m_voltageVelocity.withVelocity(RPS));
     DriveTrain.backRightMotor.setControl(Robot.m_voltageVelocity.withVelocity(-RPS));  

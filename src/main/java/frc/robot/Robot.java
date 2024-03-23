@@ -80,7 +80,7 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
 
   private Command retreatCommand, shootingSequenceCommand;
 
-  public static int START_NEAR_AMP = 0, START_MID = 1, START_FAR_FROM_AMP = 2, COL_RED = 0, COL_BLUE = 1, CLOSER_FIRST = 0, FURTHER_FIRST = 1, BEHIND_NOTE = 2, LEFT_NOTE = 3, RIGHT = 4;
+  public static int START_NEAR_AMP = 0, START_MID = 1, START_FAR_FROM_AMP = 2, COL_RED = 0, COL_BLUE = 1, CLOSER_FIRST = 0, FURTHER_FIRST = 1, BEHIND_NOTE = 2, LEFT_NOTE = 3, RIGHT_NOTE = 4;
   public static final String neamAmp = "nearAmp", farFromAmp = "FAR FROM AMP", mid = "MID", red = "RED", blue = "BLUE";
   public static int startLoc, teamCol, secondNote;
   public SendableChooser<Integer> startLocChooser = new SendableChooser<Integer>();
@@ -237,13 +237,20 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    Intake.intakeLiftMotor.setNeutralMode(NeutralModeValue.Coast);
+    DriveTrain.exitBreak();
+  }
 
   @Override
   public void disabledPeriodic() {}
 
   public static int commandsUntilRetreat;
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
+ int noteTwo;// = LEFT_NOTE;
+      int noteThree;// = RIGHT;
+      double timeWaitWhenIntakeLowering = 0.7;
+ 
   @Override
   public void autonomousInit() {
 
@@ -274,31 +281,30 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
 
       System.out.println(shootSequenceChosen);
       SmartDashboard.putString("INTAKE  is up", ((Boolean)(Intake.intakeUp)).toString());
-      int noteTwo = LEFT_NOTE;
-      int noteThree = RIGHT;
-      double timeWaitWhenIntakeLowering = 0.7;
-
+      noteTwo = LEFT_NOTE;
+      noteThree = RIGHT_NOTE;
+      timeWaitWhenIntakeLowering = 0.7;
+      if(secondNoteChooser.getSelected() != CLOSER_FIRST)//closer first means left first, as seen on the dashboard
+      {
+        noteTwo = RIGHT_NOTE;
+        noteThree = LEFT_NOTE;
+      }
       if(shootSequenceChosen == shootFourTimes || shootSequenceChosen == shootThreeTimesObtainFourth)
       {
         
-        if(secondNoteChooser.getSelected() != CLOSER_FIRST)//closer first means left first, as seen on the dashboard
-        {
-          noteTwo = RIGHT;
-          noteThree = LEFT_NOTE;
-        }
+        
         SmartDashboard.putString("AUTO RUNNING", "4 note!");
 
         shootingSequenceCommand =  (new ShootCommand()).andThen(new SimultaneousCommand(new IntakeLower()))
         .andThen(new Wait(timeWaitWhenIntakeLowering))
         .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, BEHIND_NOTE))
-        .andThen(new Wait(0.1))
+        .andThen(new Wait(0.5))
         .andThen(new ShootCommand()).andThen(new SimultaneousCommand(new IntakeLower()))
-        .andThen(new Wait(timeWaitWhenIntakeLowering))
+        .andThen(new Wait(timeWaitWhenIntakeLowering/2))
         .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, noteTwo))
         .andThen(new ShootCommand())
-        .andThen(new Wait(0.5))
+        .andThen(new Wait(timeWaitWhenIntakeLowering/2))
         .andThen(new SimultaneousCommand(new IntakeLower()))
-        .andThen(new Wait(timeWaitWhenIntakeLowering))
         .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, noteThree))
         .andThen(new ShootCommand())
         ;

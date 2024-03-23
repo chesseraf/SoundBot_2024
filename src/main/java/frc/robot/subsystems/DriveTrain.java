@@ -48,14 +48,14 @@ public class DriveTrain extends SubsystemBase{
 
     
     private static final DifferentialDrive frontDrive = new DifferentialDrive(frontLeftMotor, frontRightMotor);
-    //private static final DifferentialDrive backDrive = new DifferentialDrive(backLeftMotor, backRightMotor);
+    private static final DifferentialDrive backDrive = new DifferentialDrive(backLeftMotor, backRightMotor);
     
     
    // private final boolean breaksOn = true;
 
   public static void driveBoth(double forwardPercent, double rotationPercent)
   {
-   // backDrive.arcadeDrive(forwardPercent, -rotationPercent);
+    backDrive.arcadeDrive(forwardPercent, -rotationPercent);
     frontDrive.arcadeDrive(forwardPercent, -rotationPercent);
   }
   public static void driveStraightRPS(double RPS)
@@ -82,7 +82,7 @@ public class DriveTrain extends SubsystemBase{
 
   public static void driveBothTank(double left, double right)
   {
-    //backDrive.tankDrive(left, right);
+    backDrive.tankDrive(left, right);
     frontDrive.tankDrive(left, right);
   }
 
@@ -105,11 +105,11 @@ public class DriveTrain extends SubsystemBase{
   }
 
 
-    public void exitBreak(){
-    //   frontLeftMotor.setNeutralMode(NeutralMode.Coast);
-    //   frontRightMotor.setNeutralMode(NeutralMode.Coast);
-    //   backLeftMotor.setNeutralMode(NeutralMode.Coast);
-    //   backRightMotor.setNeutralMode(NeutralMode.Coast);
+    public static void exitBreak(){
+      frontLeftMotor.setNeutralMode(NeutralModeValue.Coast);
+      frontRightMotor.setNeutralMode(NeutralModeValue.Coast);
+      backLeftMotor.setNeutralMode(NeutralModeValue.Coast);
+      backRightMotor.setNeutralMode(NeutralModeValue.Coast);
     }
 
     public static void enterBreak(){

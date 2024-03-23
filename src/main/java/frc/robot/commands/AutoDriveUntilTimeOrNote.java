@@ -17,14 +17,14 @@ public class AutoDriveUntilTimeOrNote extends Command{
      */
     private int timeTaken, timeAllowedtoObtain, waitTime, timeEndWait, timeEndReturning;
     private boolean returnToStartingSpot, obtaining, currentlyWaiting;
-    private double RPS, turn, returnSpeedMult;
+    private double RPS, turn, returnTimeMult;
 
 //TODO change speed to rpm, and make distance a parameter instead of time
 //calculate time from distance and rpm
 
-    public AutoDriveUntilTimeOrNote(double maxSeconds, double RPS, boolean comeBack, double turn, double waitSecondsBeforeReturning, double returnSpeedMultiplier)
+    public AutoDriveUntilTimeOrNote(double maxSeconds, double RPS, boolean comeBack, double turn, double waitSecondsBeforeReturning, double returnTimeMultiplier)
     {
-        returnSpeedMult = returnSpeedMultiplier;
+        returnTimeMult = returnTimeMultiplier;
         timeAllowedtoObtain = (int)(maxSeconds * 50);
         this.turn = turn;
         this.RPS = RPS;
@@ -65,7 +65,7 @@ public class AutoDriveUntilTimeOrNote extends Command{
         {
             currentlyWaiting = true;
             timeEndWait = timeTaken + waitTime;
-            timeEndReturning = timeEndWait + (int)(timeTaken*returnSpeedMult);
+            timeEndReturning = timeEndWait + (int)(timeTaken*returnTimeMult);
 
         }
     }
@@ -76,7 +76,7 @@ public class AutoDriveUntilTimeOrNote extends Command{
         //(new SpinUpShooter()).schedule();
         if(this.returnToStartingSpot)
         {
-            timeEndReturning = (int)((1+returnSpeedMult)*timeTaken);
+            timeEndReturning = (int)((1+returnTimeMult)*timeTaken);
         }
     }
     if(currentlyWaiting)
