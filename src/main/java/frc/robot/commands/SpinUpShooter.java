@@ -94,7 +94,7 @@ public class SpinUpShooter extends Command{
   @Override
   public boolean isFinished() 
   {  
-    if(/*shotJustEnded || */RobotContainer.justPressedButtons[Constants.STOP_SPUN_SHOOTER_BUTTON])
+    if(Robot.inTeleop && (shotJustEnded || RobotContainer.justPressedButtons[Constants.STOP_SPUN_SHOOTER_BUTTON]))
     {
         return true;
     }

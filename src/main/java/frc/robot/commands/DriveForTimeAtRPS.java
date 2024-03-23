@@ -5,17 +5,28 @@ import frc.robot.Robot;
 import frc.robot.subsystems.DriveTrain;
 
 public class DriveForTimeAtRPS extends Command {
-    private double totTime, RPS;
+    private double totTime, speedRPS, turnRPS;
     private int timer;
-    public DriveForTimeAtRPS(double seconds, double RPS)
+    
+    public DriveForTimeAtRPS(double seconds, double speedRPS, double turn)
     {
         this.totTime = seconds*50;
-        this.RPS = RPS;
+        this.speedRPS = speedRPS;
+        this.turnRPS = turn;
     }
+
+    public DriveForTimeAtRPS(double seconds, double speedRPS)
+    {
+        this.totTime = seconds*50;
+        this.speedRPS = speedRPS;
+        this.turnRPS = 0;
+    }
+
+    
 
     @Override
   public void initialize() {
-    System.out.println("driveing at RPS"+RPS);
+    System.out.println("driveing at RPS"+speedRPS);
         timer = 0;
   }
 
@@ -24,13 +35,9 @@ public class DriveForTimeAtRPS extends Command {
   public void execute() {
     timer++;
 
-    System.out.println("driveing at RPS"+RPS);
+    System.out.println("driveing at RPS"+speedRPS);
 
-    DriveTrain.frontLeftMotor.setControl(Robot.m_voltageVelocity.withVelocity(RPS));
-    DriveTrain.frontRightMotor.setControl(Robot.m_voltageVelocity.withVelocity(-RPS));
-
-    DriveTrain.backLeftMotor.setControl(Robot.m_voltageVelocity.withVelocity(RPS));
-    DriveTrain.backRightMotor.setControl(Robot.m_voltageVelocity.withVelocity(-RPS));  
+    DriveTrain.driveTurnRPS(speedRPS, turnRPS); 
   }
 
   // Called once the command ends or is interrupted.

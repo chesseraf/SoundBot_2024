@@ -9,6 +9,17 @@ import frc.robot.subsystems.Intake;
 public class IntakeLower extends Command{
 
     int timer;
+    //private boolean customIntakeLiftSpeed;
+    private double speed;
+
+    public IntakeLower(double speed)
+    {
+        this.speed = speed;
+    }
+    public IntakeLower()
+    {
+        this(Constants.INTAKE_LOWER_SPEED);
+    }
 
     @Override
     public void initialize() {
@@ -22,7 +33,7 @@ public class IntakeLower extends Command{
     public void execute() {
         //System.out.println("lowering");
 
-        Intake.intakeLiftMotor.set(Constants.INTAKE_LOWER_SPEED);
+        Intake.intakeLiftMotor.set(speed);
         
         timer ++;
     }

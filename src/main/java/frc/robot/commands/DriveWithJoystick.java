@@ -39,24 +39,18 @@ public class DriveWithJoystick extends Command{
 
     
   
-    turnRate =   -YJoystick;
-    newSpeed = XJoystick;
+    newSpeed = -YJoystick;
+    turnRate = XJoystick;
 
     // newLeft = leftJoy;
     // newRight = rightJoy;
-
     // applyDeadBand(newLeft, Constants.SPEED_DEAD_BAND);
     // applyDeadBand(newRight, Constants.SPEED_DEAD_BAND);
-
     // affectMax(newLeft, prevLeft, Constants.MAX_ACCELERATION);
     // affectMax(newRight, prevRight, Constants.MAX_ACCELERATION);
-
     // DriveTrain.driveBothTank(newLeft, newRight);
-
     // prevLeft = newLeft;
     // prevRight = newRight;
-
-
       // if (turnRate > 0) {
       //   turnRate = (turnRate * turnRate) * (1-Constants.MIN_TURN) + Constants.MIN_TURN;
       // } else {
@@ -84,7 +78,7 @@ public class DriveWithJoystick extends Command{
       prevSpeed=newSpeed;
 
         
-      DriveTrain.turnDrive(newSpeed, turnRate );
+      DriveTrain.turnDrive(turnRate, newSpeed);
   }// end of execute
 
   @Override

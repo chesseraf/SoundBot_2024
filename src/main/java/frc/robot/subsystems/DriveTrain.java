@@ -68,11 +68,20 @@ public class DriveTrain extends SubsystemBase{
     DriveTrain.backRightMotor.setControl(Robot.m_voltageVelocity.withVelocity(-RPS));  
   }
 
+  public static void driveTurnRPS(double speedRPS, double turnRPS)
+  {
+    DriveTrain.frontLeftMotor.setControl(Robot.m_voltageVelocity.withVelocity(speedRPS - turnRPS));
+    DriveTrain.frontRightMotor.setControl(Robot.m_voltageVelocity.withVelocity(-speedRPS-turnRPS));
+
+
+    DriveTrain.backLeftMotor.setControl(Robot.m_voltageVelocity.withVelocity(speedRPS - turnRPS));
+    DriveTrain.backRightMotor.setControl(Robot.m_voltageVelocity.withVelocity(-speedRPS - turnRPS));  
+  }
+
   public static void turnRPS(double RPS)
   {
     DriveTrain.frontLeftMotor.setControl(Robot.m_voltageVelocity.withVelocity(RPS));
     DriveTrain.frontRightMotor.setControl(Robot.m_voltageVelocity.withVelocity(RPS));
-
 
     DriveTrain.backLeftMotor.setControl(Robot.m_voltageVelocity.withVelocity(RPS));
     DriveTrain.backRightMotor.setControl(Robot.m_voltageVelocity.withVelocity(RPS));  

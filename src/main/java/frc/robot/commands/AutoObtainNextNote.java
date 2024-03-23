@@ -18,6 +18,7 @@ public class AutoObtainNextNote extends Command{
 
    final static double turnRateFA = 0.25, turnTimeFA = 1.1, driveTimeFA = 12, driveSpeedFA = 0.3, initMoveSpeedFA = 0.25, initMoveTimeFA = 4;
 
+   private static int sign = 1;
    // return((new DriveForTimeAtRPS(1,10)
             // .andThen(new TurnForTimeAtRPS(1, -5))
             // .andThen(new AutoDriveUntilTimeOrNote(4, 20, true, 1, 1))
@@ -27,7 +28,7 @@ public class AutoObtainNextNote extends Command{
             // );
 
             //for middle start location
-   final static double sideNoteInitSpeedRPS = 15,  sideNoteTurnRateRPS = 10., sideNoteDriveSpeedRPS = 20;
+   final static double sideNoteInitSpeedRPS = 20,  sideNoteTurnRateRPS = 11., sideNoteDriveSpeedRPS = 20;
    final static double sideNoteInitTime = 0.5,  sideNoteTurnRateTime = 0.59, sideNoteDriveTime = 1.5;
    
 
@@ -99,41 +100,28 @@ public class AutoObtainNextNote extends Command{
       }
       else if(startingLoc == Robot.START_MID)
       {
+        if((noteNum == Robot.LEFT_NOTE && col == Robot.COL_BLUE) || (noteNum == Robot.RIGHT_NOTE && col == Robot.COL_RED))
+        {
+          sign = 1;
+        }
+        else 
+        {
+          sign = -1;
+        }
         if(noteNum == Robot.BEHIND_NOTE)
         {
             return((new AutoDriveUntilTimeOrNote(4, 20, true, 1, 1.4)));
-
         }
-        else if((noteNum == Robot.LEFT_NOTE && col == Robot.COL_BLUE) || (noteNum == Robot.RIGHT_NOTE && col == Robot.COL_RED))
+        else
         {
             return((new DriveForTimeAtRPS(sideNoteInitTime, sideNoteInitSpeedRPS)
-            .andThen(new TurnForTimeAtRPS(sideNoteTurnRateTime, sideNoteTurnRateRPS))
-            .andThen(new AutoDriveUntilTimeOrNote(sideNoteDriveTime, sideNoteDriveSpeedRPS, true, 1, 1))
-            .andThen(new TurnForTimeAtRPS(sideNoteTurnRateTime*1.3, -sideNoteTurnRateRPS))
+            .andThen(new TurnForTimeAtRPS(sideNoteTurnRateTime, sideNoteTurnRateRPS*sign))
+            .andThen(new AutoDriveUntilTimeOrNote(sideNoteDriveTime, sideNoteDriveSpeedRPS, true, 1, 1.1))
+            .andThen(new TurnForTimeAtRPS(sideNoteTurnRateTime*1.3, -sideNoteTurnRateRPS*sign))
             .andThen(new DriveForTimeAtRPS(sideNoteInitTime*1.4, -sideNoteInitSpeedRPS))
             .andThen(new DriveForTimeAtRPS(0.1, 0))) //stop
             );
-
         }
-        else //if((noteNum == Robot.RIGHT && col == Robot.COL_RED) || (noteNum == Robot.LEFT_NOTE && col == Robot.COL_BLUE))
-        {
-          return((new DriveForTimeAtRPS(sideNoteInitTime, sideNoteInitSpeedRPS)
-            .andThen(new TurnForTimeAtRPS(sideNoteTurnRateTime, -sideNoteTurnRateRPS))
-            .andThen(new AutoDriveUntilTimeOrNote(sideNoteDriveTime, sideNoteDriveSpeedRPS, true, 1, 1))
-            .andThen(new TurnForTimeAtRPS(sideNoteTurnRateTime*1.3, sideNoteTurnRateRPS))
-            .andThen(new DriveForTimeAtRPS(sideNoteInitTime*1.4, -sideNoteInitSpeedRPS))
-            .andThen(new DriveForTimeAtRPS(0.1, 0))) //stop
-            );
-            
-        }
-        
-        
-        /*
-        return(
-          (new AutoDriveUntilTimeOrNote(3, 0.5, true,0, 1, 1))
-        );
-       */
-
       }
       else if(startingLoc == Robot.START_FAR_FROM_AMP)
       {
@@ -167,28 +155,20 @@ public class AutoObtainNextNote extends Command{
 //     {
 //       this.comeBack = comeBack;
 //     }
-
 //     @Override
 //   public void initialize() {
-
 //     timer = 0;
-
 //   }
-
 //   // Called every time the scheduler runs while the command is scheduled.
 //   @Override
 //   public void execute() {
 //     timer++;
-
 //     if(Robot.startLoc == Robot.START_MID)
 //     {
 //       DriveTrain.driveBoth(Constants.AUTO_OBTAIN_SECOND_NOTE_SPEED, 0);
 //     }
 //  //   else if(Robot.startLoc == Robot.START_NEAR_AMP)
-    
-
 //   }
-
 //   // Called once the command ends or is interrupted.
 //   @Override
 //   public void end(boolean interrupted) {
@@ -205,10 +185,7 @@ public class AutoObtainNextNote extends Command{
 //     //   (new Wait(0.5))
 //     //     .andThen(new IntakeLift()).schedule();
 //     // }
-    
-
 //   }
-
 //   // Returns true when the command should end.
 //   @Override
 //   public boolean isFinished() {

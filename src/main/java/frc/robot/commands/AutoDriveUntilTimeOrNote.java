@@ -88,11 +88,11 @@ public class AutoDriveUntilTimeOrNote extends Command{
     }
     else if(obtaining)
     {
-        DriveTrain.driveStraightRPS(RPS);
+        DriveTrain.driveTurnRPS(RPS, turn);
     }
     else
     {
-        DriveTrain.driveStraightRPS(-RPS);
+        DriveTrain.driveTurnRPS(-RPS, -turn);
     }
 
     // if(!RobotContainer.intakePostitionUsed && !Intake.intakeUp && RobotContainer.intakeNoteLimitJustPressed) 

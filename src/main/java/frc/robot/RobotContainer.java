@@ -20,6 +20,7 @@ import frc.robot.commands.IntakeLower;
 import frc.robot.commands.IntakePulse;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.ShootIntakeLow;
+import frc.robot.commands.SpinUpShooter;
 import frc.robot.commands.Wait;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
@@ -102,6 +103,14 @@ public class RobotContainer {
     {
         //System.out.println("command scheduling");
 
+        if(!ShootCommand.currentlyShooting && !SpinUpShooter.shooterSpinningUp)
+        {
+            if(justPressedButtons[Constants.START_SPINNING_SHOOTER])
+            {
+                (new SpinUpShooter()).schedule();
+            }
+        }
+
         if(!ShootCommand.currentlyShooting  && !intakePostitionUsed)
         {
             if(justPressedButtons[Constants.SHOOT_HIGH_BUTTON])
@@ -119,7 +128,7 @@ public class RobotContainer {
             else if(justPressedButtons[Constants.SHOOT_WITH_INTAKE_BUTTON])
             {
                 //(new ShootIntakeLow()).schedule();
-                (new HoldIntakeAngle(100, 5, Constants.INTAKE_REVERSE_SHOOT_SPEED)).schedule();
+                (new HoldIntakeAngle(86, 2.5, Constants.INTAKE_REVERSE_SHOOT_SPEED)).schedule();
             } 
             else if(justPressedButtons[Constants.SHOOT_FROM_SAFTEY_BUTTON])
             {

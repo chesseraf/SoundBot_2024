@@ -14,11 +14,13 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AutoObtainNextNote;
 import frc.robot.commands.AutoShootFirstNote;
 import frc.robot.commands.DriveForTime;
+import frc.robot.commands.DriveForTimeAtRPS;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.IntakeLower;
 import frc.robot.commands.ShootCommand;
 import frc.robot.commands.SimultaneousCommand;
 import frc.robot.commands.SpinUpShooter;
+import frc.robot.commands.TurnForTimeAtRPS;
 import frc.robot.commands.Wait;
 import frc.robot.subsystems.DriveTrain;
 import frc.robot.subsystems.Intake;
@@ -69,7 +71,7 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
   
 
 
-  private String dontRetreat = "No retreat", backRetreat = "retreat back", leftRetreat = "left retreat", rightRetreat = "right retreat";
+  private String dontRetreat = "No retreat", backRetreat = "move behind line", leftRetreat = "left retreat", rightRetreat = "right retreat";
 
   private String shootTwice = "shooting twice";
   private String shootOnceObtainSecond = "obtain second, dont shoot it";
@@ -91,6 +93,7 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
  // private final SendableChooser<Double> shooterSpeedControl = new SendableChooser<>();
 
   public static double intakePos;
+  public static boolean inTeleop = false;
 
 
   private Intake take = new Intake();
@@ -130,7 +133,7 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
     configs.TorqueCurrent.PeakReverseTorqueCurrent = -40;
 
 
-    //CameraServer.startAutomaticCapture();
+    CameraServer.startAutomaticCapture();
 
     for(int i=0; i<16; i++)
     {
@@ -152,18 +155,18 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
 
     autoShootingSequence.setDefaultOption(dontShoot, dontShoot);
     autoShootingSequence.addOption(shootOnce, shootOnce);
-    autoShootingSequence.addOption(shootOnceObtainSecond, shootOnceObtainSecond);
+   // autoShootingSequence.addOption(shootOnceObtainSecond, shootOnceObtainSecond);
     autoShootingSequence.addOption(shootTwice, shootTwice);
-    autoShootingSequence.addOption(shootTwiceObtainThird, shootTwiceObtainThird);
+   // autoShootingSequence.addOption(shootTwiceObtainThird, shootTwiceObtainThird);
     autoShootingSequence.addOption(shootThreeTimes, shootThreeTimes);
-    autoShootingSequence.addOption(shootThreeTimesObtainFourth, shootThreeTimesObtainFourth);
+  //  autoShootingSequence.addOption(shootThreeTimesObtainFourth, shootThreeTimesObtainFourth);
     autoShootingSequence.addOption(shootFourTimes, shootFourTimes);
     
 
     autoRetreatChoice.setDefaultOption(dontRetreat, dontRetreat);
     autoRetreatChoice.addOption(backRetreat, backRetreat);
-    autoRetreatChoice.addOption(leftRetreat, leftRetreat);
-    autoRetreatChoice.addOption(rightRetreat, rightRetreat);
+    //autoRetreatChoice.addOption(leftRetreat, leftRetreat);
+    //autoRetreatChoice.addOption(rightRetreat, rightRetreat);
 
     useAlternativeShootingSpeeds.setDefaultOption("False", false);
     useAlternativeShootingSpeeds.addOption("True", true);
@@ -250,7 +253,8 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
  int noteTwo;// = LEFT_NOTE;
       int noteThree;// = RIGHT;
       double timeWaitWhenIntakeLowering = 0.7;
- 
+ int sign = 1;
+
   @Override
   public void autonomousInit() {
 
@@ -261,17 +265,45 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
       shootSequenceChosen = autoShootingSequence.getSelected();
       System.out.println("Auto selected: " + retreatChosen +"  and "+ shootSequenceChosen);
 
-      if(retreatChosen == rightRetreat)
+      // if(retreatChosen == rightRetreat)
+      // {
+      //   retreatCommand = new DriveForTime(3, 0.3, -0.3);
+      // }
+      // else if (retreatChosen == backRetreat)
+      // {
+      //   retreatCommand = new DriveForTime(3, 0.3, 0);
+      // }
+      // else if(retreatChosen == leftRetreat)
+      // {
+      //   retreatCommand = new DriveForTime(3, 0.3, 0.3);
+
+      // }
+
+      if (retreatChosen == backRetreat)
       {
-        retreatCommand = new DriveForTime(3, 0.3, -0.3);
-      }
-      else if (retreatChosen == backRetreat)
-      {
-        retreatCommand = new DriveForTime(3, 0.3, 0);
-      }
-      else if(retreatChosen == leftRetreat)
-      {
-        retreatCommand = new DriveForTime(3, 0.3, 0.3);
+        if(((teamCol == COL_BLUE ) && (startLoc == START_NEAR_AMP)) || ((teamCol == COL_RED ) && (startLoc == START_FAR_FROM_AMP)))
+        {
+          sign = 1;
+        }
+        else
+        {
+          sign = -1;
+        }
+        if(startLoc == START_FAR_FROM_AMP)
+        {
+          retreatCommand = (new DriveForTimeAtRPS(1.5, 15)
+          .andThen(new TurnForTimeAtRPS(0.6, 10*sign))
+          .andThen(new DriveForTimeAtRPS(2.5, 20))
+          );
+        }
+        else
+        {
+          retreatCommand = (new DriveForTimeAtRPS(1, 15)
+          .andThen(new TurnForTimeAtRPS(0.6, 10*sign))
+          .andThen(new DriveForTimeAtRPS(2.5, 20))
+          );
+        }
+        
 
       }
       else
@@ -349,7 +381,8 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
       else if(shootSequenceChosen == shootOnce)
       {
         commandsUntilRetreat = 1;
-        shootingSequenceCommand = new ShootCommand();
+
+        shootingSequenceCommand = (new ShootCommand()).andThen(new Wait(6));
       }
       else //no shooting
       {
@@ -370,7 +403,12 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
 
   @Override
   public void teleopInit() {
+    inTeleop = true;
     driveCommand.schedule();
+    if(shootingSequenceCommand != null)
+    {
+      shootingSequenceCommand.cancel();
+    }
   }
 
   /** This function is called periodically during operator control. */
