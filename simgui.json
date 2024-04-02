@@ -46,10 +46,21 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Auto choices": "String Chooser",
       "/SmartDashboard/Retreat choices": "String Chooser",
+      "/SmartDashboard/SendableChooser[0]": "String Chooser",
+      "/SmartDashboard/SendableChooser[1]": "String Chooser",
+      "/SmartDashboard/SendableChooser[2]": "String Chooser",
+      "/SmartDashboard/SendableChooser[3]": "String Chooser",
+      "/SmartDashboard/SendableChooser[4]": "String Chooser",
+      "/SmartDashboard/SendableChooser[7]": "String Chooser",
+      "/SmartDashboard/SendableChooser[8]": "String Chooser",
+      "/SmartDashboard/SendableChooser[9]": "String Chooser",
       "/SmartDashboard/Shooting sequence": "String Chooser"
     }
   },
   "NetworkTables": {
+    "Persistent Values": {
+      "open": false
+    },
     "transitory": {
       "LiveWindow": {
         "open": true

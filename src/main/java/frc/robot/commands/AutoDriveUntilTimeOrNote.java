@@ -66,7 +66,6 @@ public class AutoDriveUntilTimeOrNote extends Command{
             currentlyWaiting = true;
             timeEndWait = timeTaken + waitTime;
             timeEndReturning = timeEndWait + (int)(timeTaken*returnTimeMult);
-
         }
     }
     if(obtaining && RobotContainer.intakeNoteLimitJustPressed)
@@ -81,6 +80,8 @@ public class AutoDriveUntilTimeOrNote extends Command{
     }
     if(currentlyWaiting)
     {
+        //DriveTrain.driveTurnRPS(0, 0);
+        DriveTrain.driveTurnRPS(RPS, turn);
         if(waitTime < timeTaken)
         {
             currentlyWaiting = false;

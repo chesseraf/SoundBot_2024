@@ -28,12 +28,29 @@ public class AutoObtainNextNote extends Command{
             // );
 
             //for middle start location
-   final static double sideNoteInitSpeedRPS = 20,  sideNoteTurnRateRPS = 11., sideNoteDriveSpeedRPS = 20;
-   final static double sideNoteInitTime = 0.5,  sideNoteTurnRateTime = 0.59, sideNoteDriveTime = 1.5;
+   final static double sideNoteInitSpeedRPS = 20,  sideNoteTurnRateRPS = 11., sideNoteDriveSpeedRPS = 25;
+   final static double sideNoteInitTime = 0.5,  sideNoteTurnRateTime = 0.59, sideNoteDriveTime = 1.4;
+   static boolean fourthNote = false;
+   static double multiplierNoteFourSpeed;
    
-
    public static Command getAutoObtainSecondNoteCommand(int col, int startingLoc, int noteNum)
+   {
+     return getAutoObtainSecondNoteCommand(col, startingLoc, noteNum, false);
+   }
+
+
+   
+   public static Command getAutoObtainSecondNoteCommand(int col, int startingLoc, int noteNum, boolean noteFour)
     {
+      fourthNote = noteFour;
+      if(fourthNote)
+      {
+        multiplierNoteFourSpeed = 2;
+      }
+      else
+      {
+        multiplierNoteFourSpeed = 1;
+      }
       if(startingLoc == Robot.START_NEAR_AMP)
       {
         if(noteNum == Robot.CLOSER_FIRST)
@@ -110,13 +127,13 @@ public class AutoObtainNextNote extends Command{
         }
         if(noteNum == Robot.BEHIND_NOTE)
         {
-            return((new AutoDriveUntilTimeOrNote(4, 20, true, 1, 1.4)));
+            return((new AutoDriveUntilTimeOrNote(4, 25, true, 1, 1.4)));
         }
         else
         {
             return((new DriveForTimeAtRPS(sideNoteInitTime, sideNoteInitSpeedRPS)
             .andThen(new TurnForTimeAtRPS(sideNoteTurnRateTime, sideNoteTurnRateRPS*sign))
-            .andThen(new AutoDriveUntilTimeOrNote(sideNoteDriveTime, sideNoteDriveSpeedRPS, true, 1, 1.1))
+            .andThen(new AutoDriveUntilTimeOrNote(sideNoteDriveTime * multiplierNoteFourSpeed, sideNoteDriveSpeedRPS, true, 1, 1.1))
             .andThen(new TurnForTimeAtRPS(sideNoteTurnRateTime*1.3, -sideNoteTurnRateRPS*sign))
             .andThen(new DriveForTimeAtRPS(sideNoteInitTime*1.4, -sideNoteInitSpeedRPS))
             .andThen(new DriveForTimeAtRPS(0.1, 0))) //stop

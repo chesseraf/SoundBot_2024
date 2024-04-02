@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.ClimbUp;
 
 public final class Constants {
     public static double SPEED_MULTIPLIER = 1;
@@ -100,5 +101,10 @@ public final class Constants {
     INTAKE_REVERSE_SHOOT_SPEED = -0.25,
 
     DEGREES_BEFORE_MAX_TO_END = 2;
+
+    public static final double CLIMBER_LIFT_SPEED = 0.5;
+    public static final double CLIMBER_LOWER_SPEED = -CLIMBER_LIFT_SPEED;
+
+
 }
 

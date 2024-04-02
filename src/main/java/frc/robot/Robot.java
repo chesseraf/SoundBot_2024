@@ -32,7 +32,14 @@ import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.cameraserver.CameraServer;
-
+import edu.wpi.first.cscore.HttpCamera;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSource;
+import edu.wpi.first.cscore.HttpCamera.HttpCameraKind;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -59,9 +66,6 @@ public static final SendableChooser<Integer> alternativeOuterShootingSpeedHundre
 
 public static final SendableChooser<Integer> alternativeInnerShootingSpeedTenths = new SendableChooser<>();
 public static final SendableChooser<Integer> alternativeInnerShootingSpeedHundreths = new SendableChooser<>();
-
-
-
 
 
 public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
@@ -97,12 +101,18 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
 
 
   private Intake take = new Intake();
+  //private UsbCamera limeLight = new Limelight();
   
 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
+
+//  VideoSource limelightFeed = new VideoSource()
+  HttpCamera limelightFeed = new HttpCamera("limelight", "http://10.43.11.47:5800/stream.mjpg", HttpCameraKind.kMJPGStreamer);
+//CameraServer.getInstance().startAutomaticCapture(limelightFeed);
+
   public static TalonFXConfiguration configs;
   @Override
   public void robotInit() {
@@ -130,7 +140,11 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
 
     // Peak output of 40 amps
     configs.TorqueCurrent.PeakForwardTorqueCurrent = 40;
+    configs.CurrentLimits.SupplyCurrentLimit = 40;
+    configs.CurrentLimits.SupplyCurrentLimitEnable = true;
     configs.TorqueCurrent.PeakReverseTorqueCurrent = -40;
+
+    //CameraServer.getInstance().startAutomaticCapture(limelightFeed);
 
 
     CameraServer.startAutomaticCapture();
@@ -322,22 +336,20 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
         noteThree = LEFT_NOTE;
       }
       if(shootSequenceChosen == shootFourTimes || shootSequenceChosen == shootThreeTimesObtainFourth)
-      {
-        
-        
+      {   
         SmartDashboard.putString("AUTO RUNNING", "4 note!");
 
-        shootingSequenceCommand =  (new ShootCommand()).andThen(new SimultaneousCommand(new IntakeLower()))
+        shootingSequenceCommand =  (new ShootCommand()).andThen(new SimultaneousCommand(new IntakeLower(Constants.INTAKE_LOWER_SPEED*1.4)))
         .andThen(new Wait(timeWaitWhenIntakeLowering))
         .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, BEHIND_NOTE))
         .andThen(new Wait(0.5))
-        .andThen(new ShootCommand()).andThen(new SimultaneousCommand(new IntakeLower()))
+        .andThen(new ShootCommand()).andThen(new SimultaneousCommand(new IntakeLower(Constants.INTAKE_LOWER_SPEED*1.4)))
         .andThen(new Wait(timeWaitWhenIntakeLowering/2))
         .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, noteTwo))
         .andThen(new ShootCommand())
         .andThen(new Wait(timeWaitWhenIntakeLowering/2))
-        .andThen(new SimultaneousCommand(new IntakeLower()))
-        .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, noteThree))
+        .andThen(new SimultaneousCommand(new IntakeLower(Constants.INTAKE_LOWER_SPEED*1.4)))
+        .andThen(AutoObtainNextNote.getAutoObtainSecondNoteCommand(teamCol, startLoc, noteThree, true))
         .andThen(new ShootCommand())
         ;
         
@@ -428,6 +440,7 @@ public static final VelocityVoltage m_voltageVelocity = new VelocityVoltage(0, 0
   public void testPeriodic() {  
         for(int i=0; i<20; i++)
     {
+      System.out.println(RobotContainer.ps4.getPOV());
       if(RobotContainer.ps4.getRawButton(i))
         System.out.println(i+" pressed!");
     }

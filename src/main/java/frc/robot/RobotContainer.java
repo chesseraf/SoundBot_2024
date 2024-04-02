@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.commands.ClimbUp;
 import frc.robot.commands.DriveWithJoystick;
 import frc.robot.commands.HoldIntakeAngle;
 import frc.robot.commands.IntakeLift;
@@ -70,6 +71,8 @@ public class RobotContainer {
 
     public static boolean emergencyLiftingIntake = false;
 
+    public static double CLIMB_UP_BUTTON;
+
     public static DutyCycleEncoder intakeEncoder = new DutyCycleEncoder(9);
     public static void UpdateJoystick(){
         // DriveWithJoystick.XJoystick = THRUSTMASTER.getX();
@@ -77,6 +80,9 @@ public class RobotContainer {
 
         DriveWithJoystick.XJoystick = ps4.getRightX();
         DriveWithJoystick.YJoystick = ps4.getLeftY();
+        ClimbUp.climbValue = ps4.getPOV();
+        //CLIMB_UP_BUTTON = ps4.getPOV();
+        
 
         // DriveWithJoystick.leftJoy = ps4.getLeftY();
         // DriveWithJoystick.rightJoy = ps4.getRightY();
@@ -128,7 +134,7 @@ public class RobotContainer {
             else if(justPressedButtons[Constants.SHOOT_WITH_INTAKE_BUTTON])
             {
                 //(new ShootIntakeLow()).schedule();
-                (new HoldIntakeAngle(86, 2.5, Constants.INTAKE_REVERSE_SHOOT_SPEED)).schedule();
+                (new HoldIntakeAngle(86, 2, Constants.INTAKE_REVERSE_SHOOT_SPEED)).schedule();
             } 
             else if(justPressedButtons[Constants.SHOOT_FROM_SAFTEY_BUTTON])
             {
@@ -169,6 +175,12 @@ public class RobotContainer {
             .andThen(new IntakePulse()).schedule();
             System.out.println("NOTE JUST PRESSED LIMIT!\nlift command scheduling");
         }
+
+        if(ClimbUp.climbValue == 0)
+        {
+            new ClimbUp().schedule();
+        }
+        
     }
 
     public static void SmartBoardUpdate()
