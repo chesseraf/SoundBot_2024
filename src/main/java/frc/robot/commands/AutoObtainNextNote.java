@@ -29,7 +29,7 @@ public class AutoObtainNextNote extends Command{
 
             //for middle start location
    final static double sideNoteInitSpeedRPS = 20,  sideNoteTurnRateRPS = 11., sideNoteDriveSpeedRPS = 25;
-   final static double sideNoteInitTime = 0.5,  sideNoteTurnRateTime = 0.59, sideNoteDriveTime = 1.4;
+   final static double sideNoteInitTime = 0.15,  sideNoteTurnRateTime = 0.62, sideNoteDriveTime = 1.4;
    static boolean fourthNote = false;
    static double multiplierNoteFourSpeed;
    
